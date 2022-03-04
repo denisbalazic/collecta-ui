@@ -1,5 +1,4 @@
-import * as Effects from 'redux-saga/effects';
-import {put, takeLatest} from 'redux-saga/effects';
+import {call, ForkEffect, takeLatest} from 'redux-saga/effects';
 import {
     CREATE_COLLECTION,
     DELETE_COLLECTION,
@@ -8,6 +7,7 @@ import {
     ICreateCollectionAction,
     IDeleteCollectionAction,
     IFetchCollectionAction,
+    IFetchCollectionsAction,
     IUpdateCollectionAction,
     UPDATE_COLLECTION,
 } from './collection.sagaActionTypes';
@@ -18,52 +18,44 @@ import {
     getCollections,
     updateCollection,
 } from '../../../service/collection.service';
-import {
-    createCollectionSuccessAction,
-    deleteCollectionSuccessAction,
-    fetchCollectionsSuccessAction,
-    fetchCollectionSuccessAction,
-    updateCollectionSuccessAction,
-} from '../../reducer/collection/collection.actions';
+import {apiRequest} from '../helpers/apiRequest';
 
-const {call} = Effects;
-
-function* fetchCollectionsSaga(): Generator<void> | void {
-    const response = yield call(getCollections);
-    if (response.status === 200) {
-        yield put(fetchCollectionsSuccessAction(response.data));
-    }
+function* fetchCollectionsSaga(action: IFetchCollectionsAction): Generator<void> | void {
+    yield call(apiRequest, {
+        ...action,
+        service: getCollections,
+    });
 }
 
 function* fetchCollectionSaga(action: IFetchCollectionAction): Generator<void> | void {
-    const response = yield call(getCollection, action.payload);
-    if (response.status === 200) {
-        yield put(fetchCollectionSuccessAction(response.data));
-    }
+    yield call(apiRequest, {
+        ...action,
+        service: getCollection,
+    });
 }
 
 function* createCollectionSaga(action: ICreateCollectionAction): Generator<void> | void {
-    const response = yield call(createCollection, action.payload);
-    if (response.status === 200) {
-        yield put(createCollectionSuccessAction(response.data));
-    }
+    yield call(apiRequest, {
+        ...action,
+        service: createCollection,
+    });
 }
 
 function* updateCollectionSaga(action: IUpdateCollectionAction): Generator<void> | void {
-    const response = yield call(updateCollection, action.payload);
-    if (response.status === 200) {
-        yield put(updateCollectionSuccessAction(response.data));
-    }
+    yield call(apiRequest, {
+        ...action,
+        service: updateCollection,
+    });
 }
 
 function* deleteCollectionSaga(action: IDeleteCollectionAction): Generator<void> | void {
-    const response = yield call(deleteCollection, action.payload);
-    if (response.status === 200) {
-        yield put(deleteCollectionSuccessAction(response.data));
-    }
+    yield call(apiRequest, {
+        ...action,
+        service: deleteCollection,
+    });
 }
 
-export function* collectionSaga(): Generator<Effects.ForkEffect<never>, void> {
+export function* collectionSaga(): Generator<ForkEffect<never>, void> {
     yield takeLatest(FETCH_COLLECTIONS, fetchCollectionsSaga);
     yield takeLatest(FETCH_COLLECTION, fetchCollectionSaga);
     yield takeLatest(CREATE_COLLECTION, createCollectionSaga);

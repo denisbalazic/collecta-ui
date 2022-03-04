@@ -35,3 +35,8 @@ export enum ResponseStatus {
 }
 
 export type IBodyTypes = ICollection | IUser;
+
+export interface IApiResponse {
+    data: IBodyTypes | IPageableResponse<IBodyTypes>;
+    status: number;
+}

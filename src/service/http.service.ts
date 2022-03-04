@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {getLocalToken, getRefreshToken} from './auth.service';
 import {API_HOST} from '../config';
-import {IBodyTypes, IPageableResponse} from '../types/IResponse';
+import {IApiResponse, IBodyTypes} from '../types/IResponse';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 const prepareHeaders = (headers: any, addToken: boolean): any | undefined => {
@@ -39,13 +39,7 @@ export interface IApiCall {
     addToken?: boolean;
 }
 
-export async function apiCall({
-    method,
-    url,
-    body,
-    headers,
-    addToken = true,
-}: IApiCall): Promise<IBodyTypes | IPageableResponse<IBodyTypes> | null> {
+export async function apiCall({method, url, body, headers, addToken = true}: IApiCall): Promise<IApiResponse | null> {
     try {
         switch (method) {
             case MethodType.GET:
