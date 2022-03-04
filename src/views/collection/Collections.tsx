@@ -13,8 +13,6 @@ const Collections = () => {
         dispatch(fetchCollectionsAction());
     }, []);
 
-    console.log(collections);
-
     return (
         <div>
             <p>Collections</p>
