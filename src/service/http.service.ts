@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {getLocalToken, getRefreshToken} from './auth.service';
 import {API_HOST} from '../config';
+import {IBodyTypes, IPageableResponse} from '../types/IResponse';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 const prepareHeaders = (headers: any, addToken: boolean): any | undefined => {
@@ -23,94 +24,51 @@ const prepareHeaders = (headers: any, addToken: boolean): any | undefined => {
     return undefined;
 };
 
-export async function post(
-    url: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    body: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    headers: any,
+export enum MethodType {
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    DELETE = 'DELETE',
+}
+
+export interface IApiCall {
+    method: MethodType;
+    url: string;
+    body?: IBodyTypes;
+    headers?: any;
+    addToken?: boolean;
+}
+
+export async function apiCall({
+    method,
+    url,
+    body,
+    headers,
     addToken = true,
-    skipInterceptor = false
-) {
-    let response;
+}: IApiCall): Promise<IBodyTypes | IPageableResponse<IBodyTypes> | null> {
     try {
-        response = await axios.post(`${API_HOST}${url}`, body, {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            skipAuthRefresh: skipInterceptor,
-            headers: prepareHeaders(headers, addToken),
-        });
+        switch (method) {
+            case MethodType.GET:
+                return await axios.get(`${API_HOST}${url}`, {
+                    headers: prepareHeaders(headers, addToken),
+                });
+            case MethodType.POST:
+                return await axios.post(`${API_HOST}${url}`, body, {
+                    headers: prepareHeaders(headers, addToken),
+                });
+            case MethodType.PUT:
+                return await axios.put(`${API_HOST}${url}`, body, {
+                    headers: prepareHeaders(headers, addToken),
+                });
+            case MethodType.DELETE:
+                return await axios.delete(`${API_HOST}${url}`, {
+                    headers: prepareHeaders(headers, addToken),
+                });
+            default:
+                return null;
+        }
     } catch (e: any) {
         console.log(e);
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return response;
-}
-export async function put(
-    url: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    body: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    headers: any,
-    addToken = true,
-    skipInterceptor = false
-) {
-    let response;
-    try {
-        response = await axios.put(`${API_HOST}${url}`, body, {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            skipAuthRefresh: skipInterceptor,
-            headers: prepareHeaders(headers, addToken),
-        });
-    } catch (e: any) {
-        console.log(e);
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return response;
-}
-
-export async function get(
-    url: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    headers: any,
-    addToken = true,
-    skipInterceptor = false
-): Promise<any> {
-    let response;
-    try {
-        response = await axios.get(`${API_HOST}${url}`, {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            skipAuthRefresh: skipInterceptor,
-            headers: prepareHeaders(headers, addToken),
-        });
-    } catch (e: any) {
-        return e.response;
-    }
-
-    return response;
-}
-export async function deleteApi(
-    url: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    headers: any,
-    addToken = true,
-    skipInterceptor = false
-): Promise<any> {
-    let response;
-    try {
-        response = await axios.delete(`${API_HOST}${url}`, {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            skipAuthRefresh: skipInterceptor,
-            headers: prepareHeaders(headers, addToken),
-        });
-    } catch (e: any) {
-        return e.response;
-    }
-
-    return response;
+    return null;
 }

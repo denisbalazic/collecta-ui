@@ -1,5 +1,4 @@
-import qs from 'qs';
-import {post} from './http.service';
+import {apiCall, MethodType} from './http.service';
 
 const TOKEN_STORAGE_NAME = 'access_token';
 const REFRESH_TOKEN_STORAGE_NAME = 'refresh_token';
@@ -20,11 +19,16 @@ export function login({email, password}: {email: string; password: string}) {
         scope: 'read_all write_all',
         grant_type: 'password',
     };
-    const header = {
+    const headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
     };
 
-    return post('/v1/login/admin', qs.stringify(body), header, false, true);
+    return apiCall({
+        method: MethodType.POST,
+        url: '/v1/login/admin',
+        body,
+        headers,
+    });
 }
 
 export function removeToken(): void {
@@ -33,9 +37,16 @@ export function removeToken(): void {
 }
 
 export function getCurrentUser() {
-    return post(`/v1/users/current`, {access_token: getLocalToken(), refresh_token: getRefreshToken()}, {}, false);
+    return apiCall({
+        method: MethodType.POST,
+        url: `/v1/users/current`,
+        // body: {access_token: getLocalToken(), refresh_token: getRefreshToken()},
+    });
 }
 
 export function logout() {
-    return post(`/v1/logout`, {}, {}, true);
+    return apiCall({
+        method: MethodType.POST,
+        url: `/v1/logout`,
+    });
 }

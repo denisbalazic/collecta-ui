@@ -1,3 +1,6 @@
+import {ICollection} from './ICollection';
+import {IUser} from './IUser';
+
 export interface IPageableResponse<T> {
     data: T[];
     pagination: IPagination;
@@ -30,3 +33,5 @@ export enum ResponseStatus {
     SUCCESS,
     FAILURE,
 }
+
+export type IBodyTypes = ICollection | IUser;
