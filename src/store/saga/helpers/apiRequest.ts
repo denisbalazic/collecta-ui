@@ -17,7 +17,6 @@ import {requestFailure} from './requestFailure';
  * @callback      (optional) A callback function to be called after the request is successful with the data processed
  * @onSuccess     (optional) A custom generator function passed to redux saga if the request is successful
  * @onFailure     (optional) A custom generator function passed to redux saga if the request fails
- * @payloadNormalizer    (optional) A custom reducer to process action payload data before reaching API service
  * @payloadNormalizer    (optional) A custom reducer to process API response data before reaching the reducer
  */
 
@@ -29,7 +28,6 @@ export interface IApiRequest {
     callback?: (x: any) => any;
     onSuccess?: (x: any) => any;
     onFailure?: (x: any) => any;
-    payloadNormalizer?: (x: any) => any;
     responseNormalizer?: (x: any) => any;
 }
 
@@ -41,12 +39,9 @@ export function* apiRequest({
     callback,
     onSuccess,
     onFailure,
-    payloadNormalizer,
     responseNormalizer,
 }: IApiRequest): Generator<void> | void {
-    const normalizedPayload = payloadNormalizer ? payloadNormalizer(payload) : payload;
-
-    const response: IApiResponse | null = yield call(service, normalizedPayload);
+    const response: IApiResponse | null = yield call(service, payload);
 
     if (!response) {
         // TODO: Handle server communication error
