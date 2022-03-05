@@ -3,17 +3,17 @@ import {authReducer, IAuthReducerState, authPreloadedState} from './auth/auth.re
 import {collectionPreloadedState, collectionReducer, ICollectionReducerState} from './collection/collection.reducer';
 
 export interface AppState {
-    loggedUser: IAuthReducerState;
+    auth: IAuthReducerState;
     collection: ICollectionReducerState;
 }
 
 export const reducerPreloadedState: AppState = {
-    loggedUser: authPreloadedState,
+    auth: authPreloadedState,
     collection: collectionPreloadedState,
 };
 
 const reducer = combineReducers({
-    loggedUser: authReducer,
+    auth: authReducer,
     collection: collectionReducer,
 });
 
