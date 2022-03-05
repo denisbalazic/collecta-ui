@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {getLocalToken, getRefreshToken} from './auth.service';
+import {getLocalToken} from './auth.service';
 import {API_HOST} from '../config';
 import {IApiResponse, IBodyTypes} from '../types/IResponse';
 
@@ -11,12 +11,10 @@ const prepareHeaders = (headers: any, addToken: boolean): any | undefined => {
     };
     if (addToken) {
         const token = getLocalToken();
-        const refreshToken = getRefreshToken();
-        if (token || refreshToken) {
+        if (token) {
             preparedHeaders = {
                 ...preparedHeaders,
                 Authorization: `Bearer ${token || ''}`,
-                refresh_token: `${refreshToken || ''}`,
             };
         }
         return preparedHeaders;

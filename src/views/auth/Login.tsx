@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-// import {useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
+import {userLoginAction} from '../../store/saga/auth/auth.sagaActions';
 
 const Login = () => {
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const [authCredentials, setAuthCredentials] = useState({
         email: '',
         password: '',
@@ -17,7 +18,7 @@ const Login = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        // dispatch()
+        dispatch(userLoginAction(authCredentials));
     };
 
     return (
@@ -39,6 +40,7 @@ const Login = () => {
                         value={authCredentials.password}
                         onChange={handleChange}
                     />
+                    <button type="submit">Submit</button>
                 </form>
             </div>
         </div>

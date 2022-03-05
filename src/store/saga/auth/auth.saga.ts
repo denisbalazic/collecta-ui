@@ -1,21 +1,45 @@
 import * as Effects from 'redux-saga/effects';
 import {put, takeLatest} from 'redux-saga/effects';
-import {successLoggedUserAction} from '../../reducer/auth/auth.actions';
-import {getCurrentUser, login} from '../../../service/auth.service';
-import {ILoginSagaAction, USER_LOGIN_ACTION} from './auth.sagaActionTypes';
+import {
+    userLoginSuccessAction,
+    userLogoutSuccessAction,
+    userRegisterSuccessAction,
+} from '../../reducer/auth/auth.actions';
+import {getCurrentUser, login, logout, register, removeLocalToken, setLocalToken} from '../../../service/auth.service';
+import {IUserLoginAction, IUserRegisterAction, USER_LOGIN, USER_LOGOUT, USER_REGISTER} from './auth.sagaActionTypes';
 
 const {call} = Effects;
 
-function* loginUserSaga(action: ILoginSagaAction): Generator<void> | void {
-    const token = yield call(login, action.payload);
-    if (token.success) {
-        localStorage.setItem('access_token', token.access_token);
-        localStorage.setItem('refresh_token', token.refresh_token);
-        const response = yield call(getCurrentUser);
-        yield put(successLoggedUserAction(response.user));
+function* userRegisterSaga(action: IUserRegisterAction): Generator<void> | void {
+    const response = yield call(register, action.payload);
+    if (response.data.token) {
+        setLocalToken(response.data.token);
+        const userResponse = yield call(getCurrentUser);
+        yield put(userRegisterSuccessAction(userResponse.data));
+    }
+}
+
+function* userLoginSaga(action: IUserLoginAction): Generator<void> | void {
+    const response = yield call(login, action.payload);
+    if (response.data.token) {
+        setLocalToken(response.data.token);
+        const userResponse = yield call(getCurrentUser);
+        yield put(userLoginSuccessAction(userResponse.data));
+    }
+}
+
+function* userLogoutSaga(): Generator<void> | void {
+    const response = yield call(logout);
+    if (response.status === 200) {
+        removeLocalToken();
+        yield put(userLogoutSuccessAction());
+    } else {
+        // TODO: Logic for logout
     }
 }
 
 export function* authSaga(): Generator<Effects.ForkEffect<never>, void> {
-    yield takeLatest(USER_LOGIN_ACTION, loginUserSaga);
+    yield takeLatest(USER_REGISTER, userRegisterSaga);
+    yield takeLatest(USER_LOGIN, userLoginSaga);
+    yield takeLatest(USER_LOGOUT, userLogoutSaga);
 }

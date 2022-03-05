@@ -1,25 +1,22 @@
 export interface IUser {
     id?: string;
-    email?: string;
-    firstName?: string;
-    lastName?: string;
-    password?: string;
-    passwordRepeat?: string;
-    address?: string;
-    companyInvoice?: boolean;
-    institution?: string;
-    lastActiveAt?: null;
-    oib?: string;
-    phoneNumber?: string;
-    privacyConsent?: boolean;
-    termsConsent?: boolean;
-    enabled?: boolean;
-    verified?: boolean;
-    sendCredentials?: boolean;
+    email: string;
+    name: string;
     createdAt?: string;
-    lastUpdated?: string;
-    token?: unknown;
-    role?: string;
+    updatedAt?: string;
+    __v?: number;
+}
+
+export interface IRegisterUser {
+    email: string;
+    name: string;
+    password: string;
+    confirmedPassword: string;
+}
+
+export interface IAuthCredentials {
+    email: string;
+    password: string;
 }
 
 export interface IToken {

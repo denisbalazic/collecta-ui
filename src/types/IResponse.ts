@@ -1,5 +1,5 @@
 import {ICollection} from './ICollection';
-import {IUser} from './IUser';
+import {IAuthCredentials, IRegisterUser, IUser} from './IUser';
 
 export interface IPageableResponse<T> {
     data: T[];
@@ -34,7 +34,7 @@ export enum ResponseStatus {
     FAILURE,
 }
 
-export type IBodyTypes = ICollection | IUser;
+export type IBodyTypes = ICollection | IUser | IRegisterUser | IAuthCredentials;
 
 export interface IApiResponse {
     data: IBodyTypes | IPageableResponse<IBodyTypes>;

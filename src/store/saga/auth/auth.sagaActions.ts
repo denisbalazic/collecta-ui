@@ -1,6 +1,23 @@
-import {ILoginSagaAction, USER_LOGIN_ACTION} from './auth.sagaActionTypes';
+import {IAuthCredentials, IRegisterUser} from '../../../types/IUser';
+import {
+    IUserLoginAction,
+    IUserLogoutAction,
+    IUserRegisterAction,
+    USER_LOGIN,
+    USER_LOGOUT,
+    USER_REGISTER,
+} from './auth.sagaActionTypes';
 
-export const loginUserAction = (user: {email: string; password: string}): ILoginSagaAction => ({
-    type: USER_LOGIN_ACTION,
-    payload: user,
+export const userRegisterAction = (registerUser: IRegisterUser): IUserRegisterAction => ({
+    type: USER_REGISTER,
+    payload: registerUser,
+});
+
+export const userLoginAction = (authCredentials: IAuthCredentials): IUserLoginAction => ({
+    type: USER_LOGIN,
+    payload: authCredentials,
+});
+
+export const userLogoutAction = (): IUserLogoutAction => ({
+    type: USER_LOGOUT,
 });

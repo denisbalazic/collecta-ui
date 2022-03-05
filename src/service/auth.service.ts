@@ -1,52 +1,50 @@
 import {apiCall, MethodType} from './http.service';
+import {IAuthCredentials, IRegisterUser} from '../types/IUser';
 
-const TOKEN_STORAGE_NAME = 'access_token';
-const REFRESH_TOKEN_STORAGE_NAME = 'refresh_token';
+const TOKEN_STORAGE_NAME = 'token';
 
 export function getLocalToken(): string {
     return localStorage.getItem(TOKEN_STORAGE_NAME) || '';
 }
 
-export function getRefreshToken(): string {
-    return localStorage.getItem(REFRESH_TOKEN_STORAGE_NAME) || '';
+export function setLocalToken(token: string): void {
+    localStorage.setItem(TOKEN_STORAGE_NAME, token);
 }
 
-// eslint-disable-next-line camelcase
-export function login({email, password}: {email: string; password: string}) {
-    const body = {
-        email,
-        password,
-        scope: 'read_all write_all',
-        grant_type: 'password',
-    };
-    const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    };
+export function removeLocalToken(): void {
+    localStorage.removeItem(TOKEN_STORAGE_NAME);
+}
 
+export function register(registerUser: IRegisterUser) {
     return apiCall({
         method: MethodType.POST,
-        url: '/v1/login/admin',
-        body,
-        headers,
+        url: '/auth/register',
+        body: registerUser,
     });
 }
 
-export function removeToken(): void {
-    localStorage.removeItem(TOKEN_STORAGE_NAME);
-    localStorage.removeItem(REFRESH_TOKEN_STORAGE_NAME);
+export function login(authCredentials: IAuthCredentials) {
+    /* const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }; */
+
+    return apiCall({
+        method: MethodType.POST,
+        url: '/auth/login',
+        body: authCredentials,
+    });
 }
 
 export function getCurrentUser() {
     return apiCall({
-        method: MethodType.POST,
-        url: `/v1/users/current`,
-        // body: {access_token: getLocalToken(), refresh_token: getRefreshToken()},
+        method: MethodType.GET,
+        url: `/users/me`,
     });
 }
 
 export function logout() {
     return apiCall({
         method: MethodType.POST,
-        url: `/v1/logout`,
+        url: `/auth/logout`,
     });
 }

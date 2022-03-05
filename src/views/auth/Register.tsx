@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {userRegisterAction} from '../../store/saga/auth/auth.sagaActions';
 
 const Register = () => {
-    // const dispatch = useDispatch();
-    const [authCredentials, setAuthCredentials] = useState({
+    const dispatch = useDispatch();
+    const [registerUser, setRegisterUser] = useState({
         name: '',
         email: '',
         password: '',
@@ -10,15 +12,15 @@ const Register = () => {
     });
 
     const handleChange = (e: any) => {
-        setAuthCredentials({
-            ...authCredentials,
+        setRegisterUser({
+            ...registerUser,
             [e.target.name]: e.target.value,
         });
     };
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        // dispatch()
+        dispatch(userRegisterAction(registerUser));
     };
 
     return (
@@ -30,30 +32,31 @@ const Register = () => {
                         type="text"
                         name="name"
                         placeholder="name"
-                        value={authCredentials.name}
+                        value={registerUser.name}
                         onChange={handleChange}
                     />
                     <input
                         type="text"
                         name="email"
                         placeholder="email"
-                        value={authCredentials.email}
+                        value={registerUser.email}
                         onChange={handleChange}
                     />
                     <input
                         type="text"
                         name="password"
                         placeholder="password"
-                        value={authCredentials.password}
+                        value={registerUser.password}
                         onChange={handleChange}
                     />
                     <input
                         type="text"
                         name="confirmedPassword"
                         placeholder="confirm password"
-                        value={authCredentials.confirmedPassword}
+                        value={registerUser.confirmedPassword}
                         onChange={handleChange}
                     />
+                    <button type="submit">Submit</button>
                 </form>
             </div>
         </div>
