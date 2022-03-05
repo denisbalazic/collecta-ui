@@ -13,14 +13,16 @@ import {
     USER_REGISTER_SUCCESS,
 } from './auth.actionTypes';
 import {IUser} from '../../../types/IUser';
+import {IValidationError} from '../../../types/IResponse';
 
 export const userRegisterSuccessAction = (user: IUser): IUserRegisterSuccessAction => ({
     type: USER_REGISTER_SUCCESS,
     payload: user,
 });
 
-export const userRegisterFailureAction = (): IUserRegisterFailureAction => ({
+export const userRegisterFailureAction = (errors: IValidationError[]): IUserRegisterFailureAction => ({
     type: USER_REGISTER_FAILURE,
+    payload: errors,
 });
 
 export const userLoginSuccessAction = (user: IUser): IUserLoginSuccessAction => ({

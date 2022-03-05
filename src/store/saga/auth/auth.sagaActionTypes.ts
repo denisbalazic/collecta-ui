@@ -17,3 +17,5 @@ export interface IUserLoginAction {
 export interface IUserLogoutAction {
     type: typeof USER_LOGOUT;
 }
+
+export type IAuthSagaActions = IUserRegisterAction | IUserLoginAction | IUserLogoutAction;

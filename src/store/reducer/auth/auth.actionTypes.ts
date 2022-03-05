@@ -1,4 +1,5 @@
 import {IUser} from '../../../types/IUser';
+import {IValidationError} from '../../../types/IResponse';
 
 export const USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS';
 export const USER_REGISTER_FAILURE = 'USER_REGISTER_FAILURE';
@@ -14,6 +15,7 @@ export interface IUserRegisterSuccessAction {
 
 export interface IUserRegisterFailureAction {
     type: typeof USER_REGISTER_FAILURE;
+    payload: IValidationError[];
 }
 
 export interface IUserLoginSuccessAction {

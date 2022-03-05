@@ -45,6 +45,7 @@ export function* apiRequest({
 
     if (!response) {
         // TODO: Handle server communication error
+        console.log('Server communication error!');
     } else {
         const {status, data} = response;
         if ([200, 201].includes(status)) {

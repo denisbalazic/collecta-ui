@@ -1,27 +1,27 @@
 import * as Effects from 'redux-saga/effects';
 import {put, takeLatest} from 'redux-saga/effects';
-import {
-    userLoginSuccessAction,
-    userLogoutSuccessAction,
-    userRegisterSuccessAction,
-} from '../../reducer/auth/auth.actions';
+import {userLoginSuccessAction, userLogoutSuccessAction} from '../../reducer/auth/auth.actions';
 import {getCurrentUser, login, logout, register, removeLocalToken, setLocalToken} from '../../../service/auth.service';
 import {IUserLoginAction, IUserRegisterAction, USER_LOGIN, USER_LOGOUT, USER_REGISTER} from './auth.sagaActionTypes';
+import {apiRequest} from '../helpers/apiRequest';
 
 const {call} = Effects;
 
 function* userRegisterSaga(action: IUserRegisterAction): Generator<void> | void {
-    const response = yield call(register, action.payload);
-    if (response.data.token) {
-        setLocalToken(response.data.token);
-        const userResponse = yield call(getCurrentUser);
-        yield put(userRegisterSuccessAction(userResponse.data));
-    }
+    yield call(apiRequest, {
+        ...action,
+        service: register,
+        callback: (data) => {
+            if (data.token) {
+                setLocalToken(data.token);
+            }
+        },
+    });
 }
 
 function* userLoginSaga(action: IUserLoginAction): Generator<void> | void {
     const response = yield call(login, action.payload);
-    if (response.data.token) {
+    if (response?.data.token) {
         setLocalToken(response.data.token);
         const userResponse = yield call(getCurrentUser);
         yield put(userLoginSuccessAction(userResponse.data));
