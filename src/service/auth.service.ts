@@ -1,5 +1,6 @@
 import {apiCall, MethodType} from './http.service';
 import {IAuthCredentials, IRegisterUser} from '../types/IUser';
+import {IApiResponse} from '../types/IResponse';
 
 const TOKEN_STORAGE_NAME = 'token';
 
@@ -15,7 +16,7 @@ export function removeLocalToken(): void {
     localStorage.removeItem(TOKEN_STORAGE_NAME);
 }
 
-export function register(registerUser: IRegisterUser) {
+export async function register(registerUser: IRegisterUser): Promise<IApiResponse | null> {
     return apiCall({
         method: MethodType.POST,
         url: '/auth/register',
@@ -23,7 +24,7 @@ export function register(registerUser: IRegisterUser) {
     });
 }
 
-export function login(authCredentials: IAuthCredentials) {
+export async function login(authCredentials: IAuthCredentials): Promise<IApiResponse | null> {
     /* const headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
     }; */
@@ -35,14 +36,14 @@ export function login(authCredentials: IAuthCredentials) {
     });
 }
 
-export function getCurrentUser() {
+export async function getCurrentUser(): Promise<IApiResponse | null> {
     return apiCall({
         method: MethodType.GET,
         url: `/users/me`,
     });
 }
 
-export function logout() {
+export async function logout(): Promise<IApiResponse | null> {
     return apiCall({
         method: MethodType.POST,
         url: `/auth/logout`,
