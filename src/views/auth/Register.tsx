@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {userRegisterAction} from '../../store/saga/auth/auth.sagaActions';
+import Form from '../../components/form/Form';
+import Field from '../../components/form/Field';
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -11,15 +13,14 @@ const Register = () => {
         confirmedPassword: '',
     });
 
-    const handleChange = (e: any) => {
+    const handleChange = (name: string, value: string | number): void => {
         setRegisterUser({
             ...registerUser,
-            [e.target.name]: e.target.value,
+            [name]: value,
         });
     };
 
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
+    const handleSubmit = (): void => {
         dispatch(userRegisterAction(registerUser));
     };
 
@@ -27,37 +28,36 @@ const Register = () => {
         <div>
             <p>Register</p>
             <div>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
+                <Form handleSubmit={handleSubmit}>
+                    <Field
+                        label="Name"
                         name="name"
                         placeholder="name"
                         value={registerUser.name}
-                        onChange={handleChange}
+                        handleChange={handleChange}
                     />
-                    <input
-                        type="text"
+                    <Field
+                        label="Email"
                         name="email"
                         placeholder="email"
                         value={registerUser.email}
-                        onChange={handleChange}
+                        handleChange={handleChange}
                     />
-                    <input
-                        type="text"
+                    <Field
+                        label="Password"
                         name="password"
                         placeholder="password"
                         value={registerUser.password}
-                        onChange={handleChange}
+                        handleChange={handleChange}
                     />
-                    <input
-                        type="text"
+                    <Field
+                        label="Confirm password"
                         name="confirmedPassword"
                         placeholder="confirm password"
                         value={registerUser.confirmedPassword}
-                        onChange={handleChange}
+                        handleChange={handleChange}
                     />
-                    <button type="submit">Submit</button>
-                </form>
+                </Form>
             </div>
         </div>
     );

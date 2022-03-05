@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {userLoginAction} from '../../store/saga/auth/auth.sagaActions';
+import Form from '../../components/form/Form';
+import Field from '../../components/form/Field';
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -9,15 +11,14 @@ const Login = () => {
         password: '',
     });
 
-    const handleChange = (e: any) => {
+    const handleChange = (name: string, value: string | number): void => {
         setAuthCredentials({
             ...authCredentials,
-            [e.target.name]: e.target.value,
+            [name]: value,
         });
     };
 
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
+    const handleSubmit = (): void => {
         dispatch(userLoginAction(authCredentials));
     };
 
@@ -25,23 +26,22 @@ const Login = () => {
         <div>
             <p>Login</p>
             <div>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
+                <Form handleSubmit={handleSubmit}>
+                    <Field
+                        label="Email"
                         name="email"
                         placeholder="email"
                         value={authCredentials.email}
-                        onChange={handleChange}
+                        handleChange={handleChange}
                     />
-                    <input
-                        type="text"
+                    <Field
+                        label="Password"
                         name="password"
                         placeholder="password"
                         value={authCredentials.password}
-                        onChange={handleChange}
+                        handleChange={handleChange}
                     />
-                    <button type="submit">Submit</button>
-                </form>
+                </Form>
             </div>
         </div>
     );
