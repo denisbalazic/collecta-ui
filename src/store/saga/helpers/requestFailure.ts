@@ -5,7 +5,7 @@ export interface IRequestFailure {
     status: number;
     data?: any;
     redirect?: string;
-    onFailure?: (x: any) => any;
+    onFailure?: any;
 }
 
 export function* requestFailure({type, status, data, redirect, onFailure}: IRequestFailure): Generator<void> | void {

@@ -25,9 +25,8 @@ export interface IApiRequest {
     service: (x: any) => any;
     payload?: IBodyTypes | string;
     redirect?: string;
-    callback?: (x: any) => any;
-    onSuccess?: (x: any) => any;
-    onFailure?: (x: any) => any;
+    onSuccess?: any;
+    onFailure?: any;
     responseNormalizer?: (x: any) => any;
 }
 
@@ -36,7 +35,6 @@ export function* apiRequest({
     payload,
     service,
     redirect,
-    callback,
     onSuccess,
     onFailure,
     responseNormalizer,
@@ -55,7 +53,6 @@ export function* apiRequest({
                 type,
                 data: normalizedResponse,
                 redirect,
-                callback,
                 onSuccess,
             });
         } else {
