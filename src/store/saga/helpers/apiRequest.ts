@@ -24,7 +24,6 @@ export interface IApiRequest {
     type: string;
     service: (x: any) => any;
     payload?: IBodyTypes | string;
-    redirect?: string;
     onSuccess?: any;
     onFailure?: any;
     responseNormalizer?: (x: any) => any;
@@ -34,7 +33,6 @@ export function* apiRequest({
     type,
     payload,
     service,
-    redirect,
     onSuccess,
     onFailure,
     responseNormalizer,
@@ -52,7 +50,6 @@ export function* apiRequest({
             yield call(requestSuccess, {
                 type,
                 data: normalizedResponse,
-                redirect,
                 onSuccess,
             });
         } else {
@@ -61,7 +58,6 @@ export function* apiRequest({
                 type,
                 status,
                 data,
-                redirect,
                 onFailure,
             });
         }

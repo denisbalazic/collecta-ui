@@ -11,6 +11,7 @@ import {
 } from './auth.sagaActionTypes';
 import {apiRequest} from '../helpers/apiRequest';
 import {getCurrentUserAction} from '../user/user.sagaActions';
+import {setRedirectAction} from '../../reducer/common/common.actions';
 
 const {call} = Effects;
 
@@ -18,7 +19,14 @@ function* authSuccess(data: any): Generator<void> | void {
     if (data.token) {
         setLocalToken(data.token);
         yield put(getCurrentUserAction());
+        yield put(setRedirectAction('/collections'));
     }
+}
+
+function* logoutSuccess(): Generator<void> | void {
+    removeLocalToken();
+    // TODO: Reset reducer; remove all sensitive data
+    yield put(setRedirectAction('/'));
 }
 
 function* userRegisterSaga(action: IUserRegisterAction): Generator<void> | void {
@@ -42,7 +50,7 @@ function* userLogoutSaga(action: IUserLogoutAction): Generator<void> | void {
         ...action,
         service: logout,
     });
-    removeLocalToken();
+    yield call(logoutSuccess);
 }
 
 export function* authSaga(): Generator<Effects.ForkEffect<never>, void> {
