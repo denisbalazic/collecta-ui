@@ -1,52 +1,51 @@
 import {apiCall, MethodType} from './http.service';
+import {IAuthCredentials, IRegisterUser} from '../types/IUser';
+import {IApiResponse} from '../types/IResponse';
 
-const TOKEN_STORAGE_NAME = 'access_token';
-const REFRESH_TOKEN_STORAGE_NAME = 'refresh_token';
+const TOKEN_STORAGE_NAME = 'token';
 
 export function getLocalToken(): string {
     return localStorage.getItem(TOKEN_STORAGE_NAME) || '';
 }
 
-export function getRefreshToken(): string {
-    return localStorage.getItem(REFRESH_TOKEN_STORAGE_NAME) || '';
+export function setLocalToken(token: string): void {
+    localStorage.setItem(TOKEN_STORAGE_NAME, token);
 }
 
-// eslint-disable-next-line camelcase
-export function login({email, password}: {email: string; password: string}) {
-    const body = {
-        email,
-        password,
-        scope: 'read_all write_all',
-        grant_type: 'password',
-    };
-    const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    };
-
-    return apiCall({
-        method: MethodType.POST,
-        url: '/v1/login/admin',
-        body,
-        headers,
-    });
-}
-
-export function removeToken(): void {
+export function removeLocalToken(): void {
     localStorage.removeItem(TOKEN_STORAGE_NAME);
-    localStorage.removeItem(REFRESH_TOKEN_STORAGE_NAME);
 }
 
-export function getCurrentUser() {
+export async function register(registerUser: IRegisterUser): Promise<IApiResponse | null> {
     return apiCall({
         method: MethodType.POST,
-        url: `/v1/users/current`,
-        // body: {access_token: getLocalToken(), refresh_token: getRefreshToken()},
+        url: '/auth/register',
+        body: registerUser,
     });
 }
 
-export function logout() {
+export async function login(authCredentials: IAuthCredentials): Promise<IApiResponse | null> {
+    /* const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }; */
+
     return apiCall({
         method: MethodType.POST,
-        url: `/v1/logout`,
+        url: '/auth/login',
+        body: authCredentials,
+    });
+}
+
+export async function getCurrentUser(): Promise<IApiResponse | null> {
+    return apiCall({
+        method: MethodType.GET,
+        url: `/users/me`,
+    });
+}
+
+export async function logout(): Promise<IApiResponse | null> {
+    return apiCall({
+        method: MethodType.POST,
+        url: `/auth/logout`,
     });
 }

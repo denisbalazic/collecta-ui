@@ -1,7 +1,42 @@
-import {ISuccessLoggedUserAction, USER_LOGIN_SUCCESS} from './auth.actionTypes';
+import {
+    IUserLoginFailureAction,
+    IUserLoginSuccessAction,
+    IUserLogoutFailureAction,
+    IUserLogoutSuccessAction,
+    IUserRegisterFailureAction,
+    IUserRegisterSuccessAction,
+    USER_LOGIN_FAILURE,
+    USER_LOGIN_SUCCESS,
+    USER_LOGOUT_FAILURE,
+    USER_LOGOUT_SUCCESS,
+    USER_REGISTER_FAILURE,
+    USER_REGISTER_SUCCESS,
+} from './auth.actionTypes';
 import {IUser} from '../../../types/IUser';
+import {IValidationError} from '../../../types/IResponse';
 
-export const successLoggedUserAction = (user: IUser): ISuccessLoggedUserAction => ({
+export const userRegisterSuccessAction = (user: IUser): IUserRegisterSuccessAction => ({
+    type: USER_REGISTER_SUCCESS,
+    payload: user,
+});
+
+export const userRegisterFailureAction = (errors: IValidationError[]): IUserRegisterFailureAction => ({
+    type: USER_REGISTER_FAILURE,
+    payload: errors,
+});
+
+export const userLoginSuccessAction = (user: IUser): IUserLoginSuccessAction => ({
     type: USER_LOGIN_SUCCESS,
-    user,
+    payload: user,
+});
+
+export const userLoginFailureAction = (): IUserLoginFailureAction => ({
+    type: USER_LOGIN_FAILURE,
+});
+
+export const userLogoutSuccessAction = (): IUserLogoutSuccessAction => ({
+    type: USER_LOGOUT_SUCCESS,
+});
+export const userLogoutFailureAction = (): IUserLogoutFailureAction => ({
+    type: USER_LOGOUT_FAILURE,
 });

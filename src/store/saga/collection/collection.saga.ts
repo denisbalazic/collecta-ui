@@ -1,4 +1,4 @@
-import {call, ForkEffect, takeLatest} from 'redux-saga/effects';
+import {call, ForkEffect, put, takeLatest} from 'redux-saga/effects';
 import {
     CREATE_COLLECTION,
     DELETE_COLLECTION,
@@ -19,6 +19,7 @@ import {
     updateCollection,
 } from '../../../service/collection.service';
 import {apiRequest} from '../helpers/apiRequest';
+import {setRedirectAction} from '../../reducer/common/common.actions';
 
 function* fetchCollectionsSaga(action: IFetchCollectionsAction): Generator<void> | void {
     yield call(apiRequest, {
@@ -38,6 +39,9 @@ function* createCollectionSaga(action: ICreateCollectionAction): Generator<void>
     yield call(apiRequest, {
         ...action,
         service: createCollection,
+        *onSuccess() {
+            yield put(setRedirectAction('/collections'));
+        },
     });
 }
 
@@ -45,6 +49,9 @@ function* updateCollectionSaga(action: IUpdateCollectionAction): Generator<void>
     yield call(apiRequest, {
         ...action,
         service: updateCollection,
+        *onSuccess() {
+            yield put(setRedirectAction('/collections'));
+        },
     });
 }
 
@@ -52,6 +59,9 @@ function* deleteCollectionSaga(action: IDeleteCollectionAction): Generator<void>
     yield call(apiRequest, {
         ...action,
         service: deleteCollection,
+        *onSuccess() {
+            yield put(setRedirectAction('/collections'));
+        },
     });
 }
 

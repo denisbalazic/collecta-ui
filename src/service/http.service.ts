@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {getLocalToken, getRefreshToken} from './auth.service';
+import {getLocalToken} from './auth.service';
 import {API_HOST} from '../config';
 import {IApiResponse, IBodyTypes} from '../types/IResponse';
 
@@ -11,12 +11,10 @@ const prepareHeaders = (headers: any, addToken: boolean): any | undefined => {
     };
     if (addToken) {
         const token = getLocalToken();
-        const refreshToken = getRefreshToken();
-        if (token || refreshToken) {
+        if (token) {
             preparedHeaders = {
                 ...preparedHeaders,
                 Authorization: `Bearer ${token || ''}`,
-                refresh_token: `${refreshToken || ''}`,
             };
         }
         return preparedHeaders;
@@ -40,29 +38,35 @@ export interface IApiCall {
 }
 
 export async function apiCall({method, url, body, headers, addToken = true}: IApiCall): Promise<IApiResponse | null> {
+    let response = null;
     try {
         switch (method) {
             case MethodType.GET:
-                return await axios.get(`${API_HOST}${url}`, {
+                response = await axios.get(`${API_HOST}${url}`, {
                     headers: prepareHeaders(headers, addToken),
                 });
+                break;
             case MethodType.POST:
-                return await axios.post(`${API_HOST}${url}`, body, {
+                response = await axios.post(`${API_HOST}${url}`, body, {
                     headers: prepareHeaders(headers, addToken),
                 });
+                break;
             case MethodType.PUT:
-                return await axios.put(`${API_HOST}${url}`, body, {
+                response = await axios.put(`${API_HOST}${url}`, body, {
                     headers: prepareHeaders(headers, addToken),
                 });
+                break;
             case MethodType.DELETE:
-                return await axios.delete(`${API_HOST}${url}`, {
+                response = await axios.delete(`${API_HOST}${url}`, {
                     headers: prepareHeaders(headers, addToken),
                 });
+                break;
             default:
-                return null;
+                break;
         }
     } catch (e: any) {
-        console.log(e);
+        console.log('inside apiCall: error');
+        response = e.response;
     }
-    return null;
+    return response;
 }

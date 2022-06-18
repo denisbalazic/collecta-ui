@@ -24,10 +24,8 @@ export interface IApiRequest {
     type: string;
     service: (x: any) => any;
     payload?: IBodyTypes | string;
-    redirect?: string;
-    callback?: (x: any) => any;
-    onSuccess?: (x: any) => any;
-    onFailure?: (x: any) => any;
+    onSuccess?: any;
+    onFailure?: any;
     responseNormalizer?: (x: any) => any;
 }
 
@@ -35,8 +33,6 @@ export function* apiRequest({
     type,
     payload,
     service,
-    redirect,
-    callback,
     onSuccess,
     onFailure,
     responseNormalizer,
@@ -45,6 +41,7 @@ export function* apiRequest({
 
     if (!response) {
         // TODO: Handle server communication error
+        console.log('Server communication error!');
     } else {
         const {status, data} = response;
         if ([200, 201].includes(status)) {
@@ -53,8 +50,6 @@ export function* apiRequest({
             yield call(requestSuccess, {
                 type,
                 data: normalizedResponse,
-                redirect,
-                callback,
                 onSuccess,
             });
         } else {
@@ -63,7 +58,6 @@ export function* apiRequest({
                 type,
                 status,
                 data,
-                redirect,
                 onFailure,
             });
         }
