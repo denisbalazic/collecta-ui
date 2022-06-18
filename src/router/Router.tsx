@@ -4,12 +4,10 @@ import {useSelector} from 'react-redux';
 import {routes} from './routes';
 import Layout from '../components/layout/Layout';
 import {commonSelector} from '../store/reducer/common/common.selector';
-import NavigateWrapper from '../components/layout/NavigateWrapper';
+import NavigateWrapper from '../components/functional/NavigateWrapper';
 
 const Router = () => {
     const {redirectTo} = useSelector(commonSelector);
-
-    console.log('router rendering!!!!!');
 
     return (
         <BrowserRouter>

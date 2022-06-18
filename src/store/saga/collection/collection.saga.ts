@@ -50,7 +50,7 @@ function* updateCollectionSaga(action: IUpdateCollectionAction): Generator<void>
         ...action,
         service: updateCollection,
         *onSuccess() {
-            yield put(setRedirectAction('/collections'));
+            yield put(setRedirectAction(`/collections/${action.payload._id}`));
         },
     });
 }
