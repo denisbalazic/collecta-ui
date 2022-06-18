@@ -1,4 +1,5 @@
 import React from 'react';
+import {FieldMessageStyled, FieldStyled, InputLabelStyled, InputStyled} from './styles';
 
 interface FieldProps {
     name: string;
@@ -11,9 +12,9 @@ interface FieldProps {
 
 const Field = ({name, value, label, placeholder, errorMsg, handleChange}: FieldProps) => {
     return (
-        <div>
-            {label && <label htmlFor={name}>{label}</label>}
-            <input
+        <FieldStyled>
+            {label && <InputLabelStyled htmlFor={name}>{label}</InputLabelStyled>}
+            <InputStyled
                 id={name}
                 type="text"
                 name={name}
@@ -21,8 +22,8 @@ const Field = ({name, value, label, placeholder, errorMsg, handleChange}: FieldP
                 placeholder={placeholder}
                 onChange={(e) => handleChange(name, e.target.value)}
             />
-            {errorMsg && <p>{errorMsg}</p>}
-        </div>
+            {errorMsg && <FieldMessageStyled>{errorMsg}</FieldMessageStyled>}
+        </FieldStyled>
     );
 };
 

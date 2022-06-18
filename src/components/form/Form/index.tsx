@@ -1,17 +1,17 @@
 import React from 'react';
+import Button from '../../elements/Button';
+import {FormStyled} from './styles';
 
 interface FormProps {
-    title?: string;
     handleSubmit: () => void;
     children: any;
 }
 
-const Form = ({title, handleSubmit, children}: FormProps) => {
+const Form = ({handleSubmit, children}: FormProps) => {
     return (
-        <form>
-            <h4>{title}</h4>
+        <FormStyled>
             {children}
-            <button
+            <Button
                 type="submit"
                 onClick={(e) => {
                     e.preventDefault();
@@ -19,8 +19,8 @@ const Form = ({title, handleSubmit, children}: FormProps) => {
                 }}
             >
                 Submit
-            </button>
-        </form>
+            </Button>
+        </FormStyled>
     );
 };
 
