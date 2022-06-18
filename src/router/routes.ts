@@ -2,55 +2,67 @@ import Home from '../views/Home';
 import Register from '../views/auth/Register';
 import Login from '../views/auth/Login';
 import Collections from '../views/collection/Collections';
+import NewCollectionForm from '../views/collection/NewCollectionForm';
+import Collection from '../views/collection/Collection';
+import EditCollectionForm from '../views/collection/EditCollectionForm';
 
 export enum routeInd {
     HOME = 'HOME',
     REGISTER = 'REGISTER',
     LOGIN = 'LOGIN',
     COLLECTIONS = 'COLLECTIONS',
+    NEW_COLLECTION = 'NEW_COLLECTION',
+    UPDATE_COLLECTION = 'UPDATE_COLLECTION',
     COLLECTION = 'COLLECTION',
 }
 
 export const routes = [
     {
         index: routeInd.HOME,
-        title: 'Home',
         path: '/',
         roles: [],
         component: Home,
     },
     {
         index: routeInd.REGISTER,
-        title: 'Register',
         path: '/register',
         roles: [],
         component: Register,
     },
     {
         index: routeInd.LOGIN,
-        title: 'Login',
         path: '/login',
         roles: [],
         component: Login,
     },
     {
         index: routeInd.COLLECTIONS,
-        title: 'Collections',
         path: '/collections',
         roles: [],
         component: Collections,
     },
     {
-        index: routeInd.COLLECTION,
-        title: 'Collections',
-        path: '/collections/:collectionId/item/:itemId',
+        index: routeInd.NEW_COLLECTION,
+        path: '/collections/new',
         roles: [],
-        component: Collections,
+        component: NewCollectionForm,
+    },
+    {
+        index: routeInd.UPDATE_COLLECTION,
+        path: '/collections/:collectionId/update',
+        roles: [],
+        component: EditCollectionForm,
+    },
+    {
+        index: routeInd.COLLECTION,
+        path: '/collections/:collectionId',
+        roles: [],
+        component: Collection,
     },
 ];
 
 export const getRoute = (index: routeInd) => {
-    return routes.find((route) => route.index === index)?.path || '';
+    return routes.find((route) => route.index === index)?.path || '/';
 };
 
 export const getDynamicRoute = (index: routeInd, pathVariables: string[]) => {

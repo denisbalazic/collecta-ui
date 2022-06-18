@@ -1,7 +1,7 @@
 import axios from 'axios';
-import {getLocalToken, getRefreshToken} from './auth.service';
-
-const HOST = 'http://localhost:8080';
+import {getLocalToken} from './auth.service';
+import {API_HOST} from '../config';
+import {IApiResponse, IBodyTypes} from '../types/IResponse';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 const prepareHeaders = (headers: any, addToken: boolean): any | undefined => {
@@ -11,12 +11,10 @@ const prepareHeaders = (headers: any, addToken: boolean): any | undefined => {
     };
     if (addToken) {
         const token = getLocalToken();
-        const refreshToken = getRefreshToken();
-        if (token || refreshToken) {
+        if (token) {
             preparedHeaders = {
                 ...preparedHeaders,
                 Authorization: `Bearer ${token || ''}`,
-                refresh_token: `${refreshToken || ''}`,
             };
         }
         return preparedHeaders;
@@ -24,27 +22,51 @@ const prepareHeaders = (headers: any, addToken: boolean): any | undefined => {
     return undefined;
 };
 
-export async function post(
-    url: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    body: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    headers: any,
-    addToken = true,
-    skipInterceptor = false
-) {
-    let response;
+export enum MethodType {
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    DELETE = 'DELETE',
+}
+
+export interface IApiCall {
+    method: MethodType;
+    url: string;
+    body?: IBodyTypes;
+    headers?: any;
+    addToken?: boolean;
+}
+
+export async function apiCall({method, url, body, headers, addToken = true}: IApiCall): Promise<IApiResponse | null> {
+    let response = null;
     try {
-        response = await axios.post(`${HOST}${url}`, body, {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            skipAuthRefresh: skipInterceptor,
-            headers: prepareHeaders(headers, addToken),
-        });
+        switch (method) {
+            case MethodType.GET:
+                response = await axios.get(`${API_HOST}${url}`, {
+                    headers: prepareHeaders(headers, addToken),
+                });
+                break;
+            case MethodType.POST:
+                response = await axios.post(`${API_HOST}${url}`, body, {
+                    headers: prepareHeaders(headers, addToken),
+                });
+                break;
+            case MethodType.PUT:
+                response = await axios.put(`${API_HOST}${url}`, body, {
+                    headers: prepareHeaders(headers, addToken),
+                });
+                break;
+            case MethodType.DELETE:
+                response = await axios.delete(`${API_HOST}${url}`, {
+                    headers: prepareHeaders(headers, addToken),
+                });
+                break;
+            default:
+                break;
+        }
     } catch (e: any) {
-        console.log(e);
+        console.log('inside apiCall: error');
+        response = e.response;
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return response.data;
+    return response;
 }
