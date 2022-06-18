@@ -2,6 +2,7 @@ import React from 'react';
 import {Link, NavLink} from 'react-router-dom';
 import {getRoute, routeInd} from '../../../router/routes';
 import {NavbarItem, Navbarcontainer} from './styles';
+import Button from '../../elements/Button';
 
 const Navbar = () => {
     return (
@@ -10,7 +11,9 @@ const Navbar = () => {
                 <NavLink to={getRoute(routeInd.COLLECTIONS)}>Collections</NavLink>
             </NavbarItem>
             <NavbarItem>
-                <Link to={getRoute(routeInd.NEW_COLLECTION)}>New collection</Link>
+                <Link to={getRoute(routeInd.NEW_COLLECTION)}>
+                    <Button>New collection</Button>
+                </Link>
             </NavbarItem>
         </Navbarcontainer>
     );

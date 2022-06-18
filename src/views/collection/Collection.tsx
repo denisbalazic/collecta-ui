@@ -20,7 +20,6 @@ const Collection = () => {
 
     return (
         <div>
-            <p>Collection</p>
             <div>
                 <p>{collection?.data?.name}</p>
                 <Link to={getDynamicRoute(routeInd.UPDATE_COLLECTION, [collectionId])}>Edit</Link>
