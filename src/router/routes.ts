@@ -5,6 +5,7 @@ import Collections from '../views/collection/Collections';
 import NewCollectionForm from '../views/collection/NewCollectionForm';
 import Collection from '../views/collection/Collection';
 import EditCollectionForm from '../views/collection/EditCollectionForm';
+import NotFound from '../views/NotFound';
 
 export enum routeInd {
     HOME = 'HOME',
@@ -14,6 +15,7 @@ export enum routeInd {
     NEW_COLLECTION = 'NEW_COLLECTION',
     UPDATE_COLLECTION = 'UPDATE_COLLECTION',
     COLLECTION = 'COLLECTION',
+    NOT_FOUND = 'NOT_FOUND',
 }
 
 export const routes = [
@@ -58,6 +60,12 @@ export const routes = [
         path: '/collections/:collectionId',
         roles: [],
         component: Collection,
+    },
+    {
+        index: routeInd.NOT_FOUND,
+        path: '/*',
+        roles: [],
+        component: NotFound,
     },
 ];
 
