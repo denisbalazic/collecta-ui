@@ -6,6 +6,7 @@ import NewCollectionForm from '../views/collection/NewCollectionForm';
 import Collection from '../views/collection/Collection';
 import EditCollectionForm from '../views/collection/EditCollectionForm';
 import NotFound from '../views/NotFound';
+import ErrorThrowingPage from '../views/ErrorThrowingPage';
 
 export enum routeInd {
     HOME = 'HOME',
@@ -15,6 +16,7 @@ export enum routeInd {
     NEW_COLLECTION = 'NEW_COLLECTION',
     UPDATE_COLLECTION = 'UPDATE_COLLECTION',
     COLLECTION = 'COLLECTION',
+    ERROR = 'ERROR',
     NOT_FOUND = 'NOT_FOUND',
 }
 
@@ -62,6 +64,12 @@ export const routes = [
         component: Collection,
     },
     {
+        index: routeInd.ERROR,
+        path: '/error',
+        roles: [],
+        component: ErrorThrowingPage,
+    },
+    {
         index: routeInd.NOT_FOUND,
         path: '/*',
         roles: [],
@@ -69,13 +77,12 @@ export const routes = [
     },
 ];
 
-export const getRoute = (index: routeInd) => {
+export const getRoute = (index: routeInd): string => {
     return routes.find((route) => route.index === index)?.path || '/';
 };
 
-export const getDynamicRoute = (index: routeInd, pathVariables: string[]) => {
-    const route = pathVariables.reduce((acc, curr) => {
+export const getDynamicRoute = (index: routeInd, pathVariables: string[]): string => {
+    return pathVariables.reduce((acc, curr) => {
         return acc.replace(/:\w+(?=\/|$)/, curr);
     }, routes.find((route) => route.index === index)?.path || '');
-    return route;
 };
