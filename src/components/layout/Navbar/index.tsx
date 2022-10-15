@@ -1,17 +1,16 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {Link, NavLink} from 'react-router-dom';
-import {getRoute, routeInd} from '../../../router/routes';
-import {NavbarItem, Navbarcontainer} from './styles';
+import {Navbarcontainer, NavbarItem} from './styles';
 import Button from '../../elements/Button';
 
-const Navbar = () => {
+const Navbar = (): ReactElement => {
     return (
         <Navbarcontainer>
             <NavbarItem>
-                <NavLink to={getRoute(routeInd.COLLECTIONS)}>Collections</NavLink>
+                <NavLink to="/collections">Collections</NavLink>
             </NavbarItem>
             <NavbarItem>
-                <Link to={getRoute(routeInd.NEW_COLLECTION)}>
+                <Link to="/collections/new">
                     <Button>New collection</Button>
                 </Link>
             </NavbarItem>
