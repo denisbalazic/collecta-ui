@@ -1,20 +1,19 @@
-import React, {useEffect} from 'react';
+import React, {ReactElement, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
 import {collectionSelector} from '../../store/reducer/collection/collection.selector';
 import {deleteCollectionAction, fetchCollectionAction} from '../../store/saga/collection/collection.sagaActions';
-import {getDynamicRoute, routeInd} from '../../router/routes';
 
-const Collection = () => {
+const Collection = (): ReactElement => {
     const dispatch = useDispatch();
     const {collectionId = ''} = useParams();
     const {collection} = useSelector(collectionSelector);
 
     useEffect(() => {
         dispatch(fetchCollectionAction(collectionId));
-    }, [collectionId]);
+    }, [collectionId, dispatch]);
 
-    const handleDelete = () => {
+    const handleDelete = (): void => {
         collection?.data._id && dispatch(deleteCollectionAction(collection.data._id));
     };
 
@@ -22,7 +21,7 @@ const Collection = () => {
         <div>
             <div>
                 <p>{collection?.data?.name}</p>
-                <Link to={getDynamicRoute(routeInd.UPDATE_COLLECTION, [collectionId])}>Edit</Link>
+                <Link to={`/collections/${collectionId}/update`}>Edit</Link>
                 <button type="button" onClick={handleDelete}>
                     Delete
                 </button>
