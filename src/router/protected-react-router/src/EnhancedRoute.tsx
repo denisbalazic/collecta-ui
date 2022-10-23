@@ -2,10 +2,10 @@
 import React, {ReactElement} from 'react';
 import {RouteProps} from 'react-router-dom';
 
-interface EnhancedRouteProps extends RouteProps {
+type EnhancedRouteProps = RouteProps & {
     auth?: boolean;
     permissions?: string[];
-}
+};
 
 const EnhancedRoute = (props: EnhancedRouteProps): ReactElement | null => {
     console.log(props);

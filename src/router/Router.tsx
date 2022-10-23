@@ -13,8 +13,8 @@ import Collection from '../views/collection/Collection';
 import ErrorThrowingPage from '../views/ErrorThrowingPage';
 import NotFound from '../views/NotFound';
 import RedirectWrapper from '../components/functional/RedirectWrapper';
-import EnhancedRoutes from './EnhancedRoutes';
-import EnhancedRoute from './EnhancedRoute';
+// eslint-disable-next-line import/no-relative-packages
+import {EnhancedRoute, EnhancedRoutes} from './protected-react-router/src';
 
 const Router = (): ReactElement => {
     // const {redirectTo} = useSelector(commonSelector);
