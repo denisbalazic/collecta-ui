@@ -15,7 +15,7 @@ const Header = (): ReactElement => {
         <HeaderContainer>
             <HeaderLeftBox>
                 <HeaderItem>
-                    <NavLink to="/home">Home</NavLink>
+                    <NavLink to="/">Home</NavLink>
                 </HeaderItem>
             </HeaderLeftBox>
 
