@@ -1,8 +1,7 @@
 import React, {ReactElement} from 'react';
 import {BrowserRouter} from 'react-router-dom';
-// import {useSelector} from 'react-redux';
+import {PrRoutes as Routes, PrRoute as Route} from 'protected-react-router';
 import Layout from '../components/layout/Layout';
-// import {commonSelector} from '../store/reducer/common/common.selector';
 import Home from '../views/Home';
 import Register from '../views/auth/Register';
 import Login from '../views/auth/Login';
@@ -13,30 +12,33 @@ import Collection from '../views/collection/Collection';
 import ErrorThrowingPage from '../views/ErrorThrowingPage';
 import NotFound from '../views/NotFound';
 import RedirectWrapper from '../components/functional/RedirectWrapper';
-// eslint-disable-next-line import/no-relative-packages
-import {EnhancedRoute, EnhancedRoutes} from './protected-react-router/src';
+import {useAuth} from '../hooks/useAuth';
 
 const Router = (): ReactElement => {
-    // const {redirectTo} = useSelector(commonSelector);
+    const {loggedIn} = useAuth();
 
     return (
         <BrowserRouter>
-            <EnhancedRoutes isAuthed={false}>
+            <Routes
+                authenticated={loggedIn}
+                notAuthenticatedRoute="/login"
+                notAuthenticatedAction={() => alert('you are not authenticated')}
+            >
                 {/* eslint-disable-next-line react/jsx-no-undef */}
-                <EnhancedRoute element={<RedirectWrapper />}>
-                    <EnhancedRoute path="/" element={<Layout />}>
-                        <EnhancedRoute index element={<Home />} />
-                        <EnhancedRoute path="/register" element={<Register />} />
-                        <EnhancedRoute path="/login" element={<Login />} />
-                        <EnhancedRoute path="/collections" element={<Collections />} />
-                        <EnhancedRoute path="/collections/new" element={<NewCollectionForm />} />
-                        <EnhancedRoute path="/collections/:collectionId/update" element={<EditCollectionForm />} />
-                        <EnhancedRoute path="/collections/:collectionId" element={<Collection />} />
-                        <EnhancedRoute path="/error" element={<ErrorThrowingPage />} />
-                        <EnhancedRoute path="/*" element={<NotFound />} />
-                    </EnhancedRoute>
-                </EnhancedRoute>
-            </EnhancedRoutes>
+                <Route element={<RedirectWrapper />}>
+                    <Route path="/" element={<Layout />}>
+                        <Route index element={<Home />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/collections" element={<Collections />} />
+                        <Route isPrivate path="/collections/new" element={<NewCollectionForm />} />
+                        <Route isPrivate path="/collections/:collectionId/update" element={<EditCollectionForm />} />
+                        <Route isPrivate path="/collections/:collectionId" element={<Collection />} />
+                        <Route path="/error" element={<ErrorThrowingPage />} />
+                        <Route path="/*" element={<NotFound />} />
+                    </Route>
+                </Route>
+            </Routes>
         </BrowserRouter>
     );
 };
