@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {FieldMessageStyled, FieldStyled, InputLabelStyled, InputStyled} from './styles';
 
 interface FieldProps {
@@ -10,7 +10,7 @@ interface FieldProps {
     handleChange: (name: string, value: string | number) => void;
 }
 
-const Field = ({name, value, label, placeholder, errorMsg, handleChange}: FieldProps) => {
+const Field = ({name, value, label, placeholder, errorMsg, handleChange}: FieldProps): ReactElement => {
     return (
         <FieldStyled>
             {label && <InputLabelStyled htmlFor={name}>{label}</InputLabelStyled>}

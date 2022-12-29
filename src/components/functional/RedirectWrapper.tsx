@@ -15,7 +15,7 @@ const RedirectWrapper = (): ReactElement => {
             navigate(redirectTo);
         }
         dispatch(setRedirectAction(''));
-    }, [navigate, redirectTo]);
+    }, [dispatch, navigate, redirectTo]);
 
     return <Outlet />;
 };

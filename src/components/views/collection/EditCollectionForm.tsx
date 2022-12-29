@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {fetchCollectionAction, updateCollectionAction} from '../../../store/saga/collection/collection.sagaActions';
@@ -8,7 +8,7 @@ import H1 from '../../elements/H1';
 import Field from '../../compounds/Field';
 import CenteredContainer from '../../elements/CenteredContainer';
 
-const EditCollectionForm = () => {
+const EditCollectionForm = (): ReactElement => {
     const dispatch = useDispatch();
     const {collectionId = ''} = useParams();
     const {collection} = useSelector(collectionSelector);
@@ -16,7 +16,7 @@ const EditCollectionForm = () => {
 
     useEffect(() => {
         dispatch(fetchCollectionAction(collectionId));
-    }, [collectionId]);
+    }, [collectionId, dispatch]);
 
     useEffect(() => {
         if (collection) {
@@ -24,7 +24,7 @@ const EditCollectionForm = () => {
         }
     }, [collection]);
 
-    const handleSubmit = () => {
+    const handleSubmit = (): void => {
         dispatch(updateCollectionAction({...collection?.data, name}));
     };
 

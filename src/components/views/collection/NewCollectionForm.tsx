@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {createCollectionAction} from '../../../store/saga/collection/collection.sagaActions';
 import Field from '../../compounds/Field';
@@ -6,11 +6,11 @@ import Form from '../../compounds/Form';
 import H1 from '../../elements/H1';
 import CenteredContainer from '../../elements/CenteredContainer';
 
-const NewCollectionForm = () => {
+const NewCollectionForm = (): ReactElement => {
     const dispatch = useDispatch();
     const [name, setName] = useState<string>('');
 
-    const handleSubmit = () => {
+    const handleSubmit = (): void => {
         dispatch(createCollectionAction({name}));
     };
 

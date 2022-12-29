@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {FooterContainerStyled} from './styles';
 
-const Footer = () => {
+const Footer = (): ReactElement => {
     return (
         <FooterContainerStyled>
             <p>created by spaceroot</p>

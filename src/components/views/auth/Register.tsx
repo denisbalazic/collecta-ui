@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {userRegisterAction} from '../../../store/saga/auth/auth.sagaActions';
 import Form from '../../compounds/Form';
@@ -6,7 +6,7 @@ import Field from '../../compounds/Field';
 import H1 from '../../elements/H1';
 import CenteredContainer from '../../elements/CenteredContainer';
 
-const Register = () => {
+const Register = (): ReactElement => {
     const dispatch = useDispatch();
     const [registerUser, setRegisterUser] = useState({
         name: '',
