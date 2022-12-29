@@ -1,9 +1,8 @@
 import React, {ReactElement} from 'react';
 import {NavLink} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import {getRoute, routeInd} from '../../../router/routes';
 import {userLogoutAction} from '../../../store/saga/auth/auth.sagaActions';
-import {HeaderContainer, HeaderItem, HeaderLeftBox, HeaderRightBoxStyled} from './styles';
+import {HeaderContainerStyled, HeaderItemStyled, HeaderLeftBoxStyled, HeaderRightBoxStyled} from './styles';
 
 const Header = (): ReactElement => {
     const dispatch = useDispatch();
@@ -13,31 +12,31 @@ const Header = (): ReactElement => {
     };
 
     return (
-        <HeaderContainer>
-            <HeaderLeftBox>
-                <HeaderItem>
-                    <NavLink to={getRoute(routeInd.HOME)}>Home</NavLink>
-                </HeaderItem>
-            </HeaderLeftBox>
+        <HeaderContainerStyled>
+            <HeaderLeftBoxStyled>
+                <HeaderItemStyled>
+                    <NavLink to="/">Home</NavLink>
+                </HeaderItemStyled>
+            </HeaderLeftBoxStyled>
 
-            <HeaderItem>
-                <NavLink to={getRoute(routeInd.COLLECTIONS)}>Collections</NavLink>
-            </HeaderItem>
+            <HeaderItemStyled>
+                <NavLink to="/collections">Collections</NavLink>
+            </HeaderItemStyled>
 
             <HeaderRightBoxStyled>
-                <HeaderItem>
-                    <NavLink to={getRoute(routeInd.REGISTER)}>Register</NavLink>
-                </HeaderItem>
-                <HeaderItem>
-                    <NavLink to={getRoute(routeInd.LOGIN)}>Login</NavLink>
-                </HeaderItem>
-                <HeaderItem>
+                <HeaderItemStyled>
+                    <NavLink to="/register">Register</NavLink>
+                </HeaderItemStyled>
+                <HeaderItemStyled>
+                    <NavLink to="/login">Login</NavLink>
+                </HeaderItemStyled>
+                <HeaderItemStyled>
                     <button type="button" onClick={handleLogout}>
                         logout
                     </button>
-                </HeaderItem>
+                </HeaderItemStyled>
             </HeaderRightBoxStyled>
-        </HeaderContainer>
+        </HeaderContainerStyled>
     );
 };
 

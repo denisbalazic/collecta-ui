@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const HeaderContainer = styled.header`
+export const HeaderContainerStyled = styled.header`
     grid-area: header;
     display: flex;
     justify-content: center;
@@ -10,7 +10,7 @@ export const HeaderContainer = styled.header`
     font-size: 1.3em;
 `;
 
-export const HeaderLeftBox = styled.div`
+export const HeaderLeftBoxStyled = styled.div`
     margin-right: auto;
     display: flex;
 `;
@@ -20,6 +20,6 @@ export const HeaderRightBoxStyled = styled.div`
     display: flex;
 `;
 
-export const HeaderItem = styled.div`
+export const HeaderItemStyled = styled.div`
     margin: 10px;
 `;

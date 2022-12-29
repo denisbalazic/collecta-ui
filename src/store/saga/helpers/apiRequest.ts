@@ -7,7 +7,7 @@ import {requestFailure} from './requestFailure';
  * The apiRequest function can be used with redux saga to make async API calls.
  *
  * By passing strategical params, the redux action will contain
- * valuable information to oost the redux/saga process.
+ * valuable information to boost the redux/saga process.
  *
  * @type          Action type (Eg. FETCH_DATA)
  * @payload       (optional) Action payload (could be object or string)

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const FooterContainer = styled.footer`
+export const FooterContainerStyled = styled.footer`
     grid-area: footer;
     display: flex;
     justify-content: space-around;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Navbarcontainer = styled.nav`
+export const NavbarContainerStyled = styled.nav`
     grid-area: navbar;
     display: flex;
     flex-direction: column;
@@ -10,6 +10,6 @@ export const Navbarcontainer = styled.nav`
     font-size: 1.3em;
 `;
 
-export const NavbarItem = styled.div`
+export const NavbarItemStyled = styled.div`
     margin: 10px;
 `;
