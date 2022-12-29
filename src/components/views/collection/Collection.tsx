@@ -1,8 +1,8 @@
 import React, {ReactElement, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link, useParams} from 'react-router-dom';
-import {collectionSelector} from '../../store/reducer/collection/collection.selector';
-import {deleteCollectionAction, fetchCollectionAction} from '../../store/saga/collection/collection.sagaActions';
+import {collectionSelector} from '../../../store/reducer/collection/collection.selector';
+import {deleteCollectionAction, fetchCollectionAction} from '../../../store/saga/collection/collection.sagaActions';
 
 const Collection = (): ReactElement => {
     const dispatch = useDispatch();

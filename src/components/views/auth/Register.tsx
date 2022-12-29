@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {userRegisterAction} from '../../store/saga/auth/auth.sagaActions';
-import Form from '../../components/form/Form';
-import Field from '../../components/form/Field/Field';
-import H1 from '../../components/elements/H1';
-import CenteredContainer from '../../components/shared/CenteredContainer';
+import {userRegisterAction} from '../../../store/saga/auth/auth.sagaActions';
+import Form from '../../compounds/Form';
+import Field from '../../compounds/Field';
+import H1 from '../../elements/H1';
+import CenteredContainer from '../../elements/CenteredContainer';
 
 const Register = () => {
     const dispatch = useDispatch();

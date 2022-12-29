@@ -1,11 +1,11 @@
 import React from 'react';
-import {FooterContainer} from './styles';
+import {FooterContainerStyled} from './styles';
 
 const Footer = () => {
     return (
-        <FooterContainer>
+        <FooterContainerStyled>
             <p>created by spaceroot</p>
-        </FooterContainer>
+        </FooterContainerStyled>
     );
 };
 

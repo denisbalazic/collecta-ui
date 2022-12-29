@@ -1,16 +1,16 @@
 import React, {ReactElement} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import {PrRoutes as Routes, PrRoute as Route} from 'protected-react-router';
-import Layout from '../components/layout/Layout';
-import Home from '../views/Home';
-import Register from '../views/auth/Register';
-import Login from '../views/auth/Login';
-import Collections from '../views/collection/Collections';
-import NewCollectionForm from '../views/collection/NewCollectionForm';
-import EditCollectionForm from '../views/collection/EditCollectionForm';
-import Collection from '../views/collection/Collection';
-import ErrorThrowingPage from '../views/ErrorThrowingPage';
-import NotFound from '../views/NotFound';
+import Layout from '../components/layout/MainLayout';
+import Home from '../components/views/Home';
+import Register from '../components/views/auth/Register';
+import Login from '../components/views/auth/Login';
+import Collections from '../components/views/collection/Collections';
+import NewCollectionForm from '../components/views/collection/NewCollectionForm';
+import EditCollectionForm from '../components/views/collection/EditCollectionForm';
+import Collection from '../components/views/collection/Collection';
+import ErrorThrowingPage from '../components/views/ErrorThrowingPage';
+import NotFound from '../components/views/NotFound';
 import RedirectWrapper from '../components/functional/RedirectWrapper';
 import {useAuth} from '../hooks/useAuth';
 

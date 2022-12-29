@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
-import {fetchCollectionAction, updateCollectionAction} from '../../store/saga/collection/collection.sagaActions';
-import {collectionSelector} from '../../store/reducer/collection/collection.selector';
-import Form from '../../components/form/Form';
-import H1 from '../../components/elements/H1';
-import Field from '../../components/form/Field/Field';
-import CenteredContainer from '../../components/shared/CenteredContainer';
+import {fetchCollectionAction, updateCollectionAction} from '../../../store/saga/collection/collection.sagaActions';
+import {collectionSelector} from '../../../store/reducer/collection/collection.selector';
+import Form from '../../compounds/Form';
+import H1 from '../../elements/H1';
+import Field from '../../compounds/Field';
+import CenteredContainer from '../../elements/CenteredContainer';
 
 const EditCollectionForm = () => {
     const dispatch = useDispatch();

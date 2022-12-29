@@ -2,7 +2,7 @@ import React, {ReactElement} from 'react';
 import {NavLink} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {userLogoutAction} from '../../../store/saga/auth/auth.sagaActions';
-import {HeaderContainer, HeaderItem, HeaderLeftBox, HeaderRightBoxStyled} from './styles';
+import {HeaderContainerStyled, HeaderItemStyled, HeaderLeftBoxStyled, HeaderRightBoxStyled} from './styles';
 
 const Header = (): ReactElement => {
     const dispatch = useDispatch();
@@ -12,31 +12,31 @@ const Header = (): ReactElement => {
     };
 
     return (
-        <HeaderContainer>
-            <HeaderLeftBox>
-                <HeaderItem>
+        <HeaderContainerStyled>
+            <HeaderLeftBoxStyled>
+                <HeaderItemStyled>
                     <NavLink to="/">Home</NavLink>
-                </HeaderItem>
-            </HeaderLeftBox>
+                </HeaderItemStyled>
+            </HeaderLeftBoxStyled>
 
-            <HeaderItem>
+            <HeaderItemStyled>
                 <NavLink to="/collections">Collections</NavLink>
-            </HeaderItem>
+            </HeaderItemStyled>
 
             <HeaderRightBoxStyled>
-                <HeaderItem>
+                <HeaderItemStyled>
                     <NavLink to="/register">Register</NavLink>
-                </HeaderItem>
-                <HeaderItem>
+                </HeaderItemStyled>
+                <HeaderItemStyled>
                     <NavLink to="/login">Login</NavLink>
-                </HeaderItem>
-                <HeaderItem>
+                </HeaderItemStyled>
+                <HeaderItemStyled>
                     <button type="button" onClick={handleLogout}>
                         logout
                     </button>
-                </HeaderItem>
+                </HeaderItemStyled>
             </HeaderRightBoxStyled>
-        </HeaderContainer>
+        </HeaderContainerStyled>
     );
 };
 

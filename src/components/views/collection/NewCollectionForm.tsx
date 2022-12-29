@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {createCollectionAction} from '../../store/saga/collection/collection.sagaActions';
-import Field from '../../components/form/Field/Field';
-import Form from '../../components/form/Form';
-import H1 from '../../components/elements/H1';
-import CenteredContainer from '../../components/shared/CenteredContainer';
+import {createCollectionAction} from '../../../store/saga/collection/collection.sagaActions';
+import Field from '../../compounds/Field';
+import Form from '../../compounds/Form';
+import H1 from '../../elements/H1';
+import CenteredContainer from '../../elements/CenteredContainer';
 
 const NewCollectionForm = () => {
     const dispatch = useDispatch();

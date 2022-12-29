@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const GridContainer = styled.div`
+export const GridContainerStyled = styled.div`
     display: grid;
     grid-template-rows: 60px 1fr 40px;
     grid-template-columns: 200px 1fr 200px;
@@ -16,6 +16,6 @@ export const GridContainer = styled.div`
     //position: relative; /* ? */
 `;
 
-export const MainContainer = styled.main`
+export const MainContainerStyled = styled.main`
     padding: 10px;
 `;

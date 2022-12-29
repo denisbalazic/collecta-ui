@@ -20,7 +20,7 @@ export const InputStyled = styled.input`
     font-size: 1.4em;
 `;
 
-export const FieldMessageStyled = styled.input`
+export const FieldMessageStyled = styled.div`
     color: ${(props) => props.theme.color.primary};
     font-size: 0.8em;
     font-style: italic;

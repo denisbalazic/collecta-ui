@@ -1,20 +1,20 @@
 import React, {ReactElement} from 'react';
 import {Outlet} from 'react-router-dom';
 import Header from '../Header';
-import {GridContainer, MainContainer} from './styles';
+import {GridContainerStyled, MainContainerStyled} from './styles';
 import Footer from '../Footer';
 import Navbar from '../Navbar';
 
 const Layout = (): ReactElement => {
     return (
-        <GridContainer>
+        <GridContainerStyled>
             <Header />
             <Navbar />
-            <MainContainer>
+            <MainContainerStyled>
                 <Outlet />
-            </MainContainer>
+            </MainContainerStyled>
             <Footer />
-        </GridContainer>
+        </GridContainerStyled>
     );
 };
 
