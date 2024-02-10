@@ -4,7 +4,7 @@ export const FieldStyled = styled.div`
     display: flex;
     flex-direction: column;
     margin: 10px 0;
-    color: green;
+    color: blue;
 `;
 
 export const InputLabelStyled = styled.label`
