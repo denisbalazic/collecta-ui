@@ -1,6 +1,6 @@
 import React, {ReactElement} from 'react';
-import Button from '../../elements/Button';
-import {FormStyled} from './styles';
+import Button from '../elements/Button';
+import {FormStyled} from './Form.style';
 
 interface FormProps {
     handleSubmit: () => void;

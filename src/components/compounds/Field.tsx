@@ -1,5 +1,5 @@
 import React, {ReactElement} from 'react';
-import {FieldMessageStyled, FieldStyled, InputLabelStyled, InputStyled} from './styles';
+import {FieldMessageStyled, FieldStyled, InputLabelStyled, InputStyled} from './Field.style';
 
 interface FieldProps {
     name: string;

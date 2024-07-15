@@ -1,9 +1,9 @@
 import React, {ReactElement} from 'react';
 import {Outlet} from 'react-router-dom';
-import Header from '../Header';
-import {GridContainerStyled, MainContainerStyled} from './styles';
-import Footer from '../Footer';
-import Navbar from '../Navbar';
+import Footer from './Footer';
+import Navbar from './Navbar';
+import Header from './Header';
+import {GridContainerStyled, MainContainerStyled} from './MainLayout.style';
 
 const Layout = (): ReactElement => {
     return (

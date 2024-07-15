@@ -1,8 +1,8 @@
 import React, {ReactElement} from 'react';
 import {NavLink} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import {userLogoutAction} from '../../../store/saga/auth/auth.sagaActions';
-import {HeaderContainerStyled, HeaderItemStyled, HeaderLeftBoxStyled, HeaderRightBoxStyled} from './styles';
+import {userLogoutAction} from '../../store/saga/auth/auth.sagaActions';
+import {HeaderContainerStyled, HeaderItemStyled, HeaderLeftBoxStyled, HeaderRightBoxStyled} from './Header.style';
 
 const Header = (): ReactElement => {
     const dispatch = useDispatch();
