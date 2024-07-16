@@ -2,7 +2,7 @@ const theme = {
     color: {
         basic: '#274c77',
         basicLight: '#e7ecef',
-        primary: '#6096ba',
+        primary: '#006769',
         secondary: '#a3cef1',
         tertiary: '#8b8c89',
     },

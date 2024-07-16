@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 100%;
     font-weight: normal;
     text-decoration: none;
-    color: ${theme.color.basic};
+    color: inherit;
   }
 
   /* Set core html defaults */
@@ -28,6 +28,7 @@ const GlobalStyle = createGlobalStyle`
     scroll-behavior: smooth;
     text-rendering: optimizeSpeed;
     line-height: 1.5;
+    color: ${theme.color.basic};
   }
 
   /* Remove list styles on ul, ol elements with a class attribute */
