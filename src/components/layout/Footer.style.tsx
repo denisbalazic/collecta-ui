@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 export const FooterContainerStyled = styled.footer`
     grid-area: footer;
