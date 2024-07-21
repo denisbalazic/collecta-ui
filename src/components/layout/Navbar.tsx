@@ -10,9 +10,7 @@ const Navbar = (): ReactElement => {
                 <NavLink to="/collections">Collections</NavLink>
             </NavbarItemStyled>
             <NavbarItemStyled>
-                <Link to="/collections/new">
-                    <Button>New collection</Button>
-                </Link>
+                <Button to="/collections/new">New collection</Button>
             </NavbarItemStyled>
         </NavbarContainerStyled>
     );

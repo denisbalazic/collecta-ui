@@ -5,9 +5,9 @@ export const HeaderContainerStyled = styled.header`
     display: flex;
     justify-content: space-between;
     align-content: center;
-    padding: 10px;
+    padding: 0 10px;
     background-color: ${(props) => props.theme.color.primary};
-    color: ${(props) => props.theme.color.basicLight} !important;
+    color: #fff;
     font-size: 1.3em;
 `;
 
@@ -21,6 +21,4 @@ export const HeaderRightBoxStyled = styled.div`
 
 export const HeaderItemStyled = styled.div`
     margin: 10px;
-    color: white;
-    border: 1px solid white;
 `;

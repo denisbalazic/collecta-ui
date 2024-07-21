@@ -1,10 +1,15 @@
-const theme = {
+import {BasicTheme} from './theme.type';
+
+const theme: BasicTheme = {
     color: {
         basic: '#274c77',
         basicLight: '#e7ecef',
         primary: '#006769',
-        secondary: '#a3cef1',
+        primaryLight: '#00787A',
+        secondary: '#d2ebd8',
+        secondaryLight: '#edf5e5',
         tertiary: '#8b8c89',
+        background: '#f5f5f5',
     },
     layout: {
         headerHeight: '60px',

@@ -2,6 +2,7 @@ import React, {ReactElement} from 'react';
 import {NavLink} from 'react-router-dom';
 import {HeaderContainerStyled, HeaderItemStyled, HeaderLeftBoxStyled, HeaderRightBoxStyled} from './Header.style';
 import {useLogoutMutation} from '../../store/api/auth.api';
+import Button from '../elements/Button';
 
 const Header = (): ReactElement => {
     const [logout] = useLogoutMutation();
@@ -14,25 +15,29 @@ const Header = (): ReactElement => {
         <HeaderContainerStyled>
             <HeaderLeftBoxStyled>
                 <HeaderItemStyled>
-                    <NavLink to="/">Home</NavLink>
+                    <Button to="/">Home</Button>
                 </HeaderItemStyled>
             </HeaderLeftBoxStyled>
 
             <HeaderItemStyled>
-                <NavLink to="/collections">Collections</NavLink>
+                <Button to="/collections">Explore</Button>
             </HeaderItemStyled>
 
             <HeaderRightBoxStyled>
                 <HeaderItemStyled>
-                    <NavLink to="/register">Register</NavLink>
+                    <Button secondary transparent to="/register">
+                        Register
+                    </Button>
                 </HeaderItemStyled>
                 <HeaderItemStyled>
-                    <NavLink to="/login">Login</NavLink>
+                    <Button secondary transparent to="/login">
+                        Login
+                    </Button>
                 </HeaderItemStyled>
                 <HeaderItemStyled>
-                    <button type="button" onClick={handleLogout}>
-                        logout
-                    </button>
+                    <Button secondary transparent icon="fe:logout" onClick={handleLogout}>
+                        Logout
+                    </Button>
                 </HeaderItemStyled>
             </HeaderRightBoxStyled>
         </HeaderContainerStyled>
