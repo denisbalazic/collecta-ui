@@ -1,1 +1,3 @@
-export const API_HOST = process.env.REACT_APP_API_HOST;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const API_HOST = import.meta.env.VITE_API_HOST;

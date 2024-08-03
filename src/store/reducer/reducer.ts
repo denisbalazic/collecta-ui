@@ -11,7 +11,7 @@ export interface AppState {
     common: ICommonReducerState;
 }
 
-export const reducerPreloadedState: AppState = {
+export const reducerPreloadedState: Partial<AppState> = {
     auth: authPreloadedState,
     collection: collectionPreloadedState,
     user: userPreloadedState,
