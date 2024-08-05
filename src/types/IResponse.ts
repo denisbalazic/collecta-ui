@@ -4,7 +4,6 @@ import {IAuthCredentials, IRegisterUser, IUser} from './IUser';
 export interface IPageableResponse<T> {
     data: T[];
     pagination: IPagination;
-    status: ResponseStatus;
 }
 
 export interface IPagination {
@@ -27,12 +26,7 @@ export interface IValidationError {
     message: string;
 }
 
-export enum ResponseStatus {
-    IDLE,
-    LOADING,
-    SUCCESS,
-    FAILURE,
-}
+export type WithoutId<T extends {_id: string}> = Omit<T, '_id'>;
 
 export type IBodyTypes = ICollection | IUser | IRegisterUser | IAuthCredentials;
 

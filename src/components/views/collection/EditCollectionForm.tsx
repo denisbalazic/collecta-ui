@@ -1,31 +1,27 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
-import {fetchCollectionAction, updateCollectionAction} from '../../../store/saga/collection/collection.sagaActions';
-import {collectionSelector} from '../../../store/reducer/collection/collection.selector';
 import Form from '../../compounds/Form';
 import H1 from '../../elements/H1';
 import Field from '../../compounds/Field';
 import CenteredContainer from '../../elements/CenteredContainer';
+import {useFetchCollectionQuery, useUpdateCollectionMutation} from '../../../store/api/collection.api';
 
 const EditCollectionForm = (): ReactElement => {
-    const dispatch = useDispatch();
     const {collectionId = ''} = useParams();
-    const {collection} = useSelector(collectionSelector);
     const [name, setName] = useState<string>('');
 
-    useEffect(() => {
-        dispatch(fetchCollectionAction(collectionId));
-    }, [collectionId, dispatch]);
+    const {data: collection} = useFetchCollectionQuery(collectionId);
+
+    const [updateCollection, {error: updateError}] = useUpdateCollectionMutation();
 
     useEffect(() => {
         if (collection) {
-            setName(collection.data.name);
+            setName(collection.name);
         }
     }, [collection]);
 
     const handleSubmit = (): void => {
-        dispatch(updateCollectionAction({...collection?.data, name}));
+        updateCollection({...collection, name});
     };
 
     return (
@@ -34,6 +30,7 @@ const EditCollectionForm = (): ReactElement => {
                 <H1>Update collection</H1>
                 <Field label="Name" name="name" value={name} handleChange={(name, value) => setName(value as string)} />
             </Form>
+            {updateError && <div>Error updating</div>}
         </CenteredContainer>
     );
 };

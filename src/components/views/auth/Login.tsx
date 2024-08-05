@@ -1,13 +1,13 @@
 import React, {ReactElement, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {userLoginAction} from '../../../store/saga/auth/auth.sagaActions';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
 import H1 from '../../elements/H1';
 import CenteredContainer from '../../elements/CenteredContainer';
+import {useLoginMutation} from '../../../store/api/auth.api';
 
 const Login = (): ReactElement => {
-    const dispatch = useDispatch();
+    const [login, {error}] = useLoginMutation();
+
     const [authCredentials, setAuthCredentials] = useState({
         email: '',
         password: '',
@@ -21,7 +21,7 @@ const Login = (): ReactElement => {
     };
 
     const handleSubmit = (): void => {
-        dispatch(userLoginAction(authCredentials));
+        login(authCredentials);
     };
 
     return (
@@ -42,6 +42,7 @@ const Login = (): ReactElement => {
                     value={authCredentials.password}
                     handleChange={handleChange}
                 />
+                {error && <p>Wrong credentials or sth else :)</p>}
             </Form>
         </CenteredContainer>
     );

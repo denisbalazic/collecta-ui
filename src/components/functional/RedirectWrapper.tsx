@@ -2,8 +2,7 @@
 import React, {ReactElement, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Outlet, useNavigate} from 'react-router-dom';
-import {commonSelector} from '../../store/reducer/common/common.selector';
-import {setRedirectAction} from '../../store/reducer/common/common.actions';
+import {setRedirectAction, commonSelector} from '../../store/common.reducer';
 
 const RedirectWrapper = (): ReactElement => {
     const {redirectTo} = useSelector(commonSelector);
