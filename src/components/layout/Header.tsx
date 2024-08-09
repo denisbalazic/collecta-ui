@@ -1,14 +1,13 @@
 import React, {ReactElement} from 'react';
 import {NavLink} from 'react-router-dom';
-import {useDispatch} from 'react-redux';
-import {userLogoutAction} from '../../store/saga/auth/auth.sagaActions';
 import {HeaderContainerStyled, HeaderItemStyled, HeaderLeftBoxStyled, HeaderRightBoxStyled} from './Header.style';
+import {useLogoutMutation} from '../../store/api/auth.api';
 
 const Header = (): ReactElement => {
-    const dispatch = useDispatch();
+    const [logout] = useLogoutMutation();
 
     const handleLogout = (): void => {
-        dispatch(userLogoutAction());
+        logout();
     };
 
     return (

@@ -1,17 +1,17 @@
 import React, {ReactElement, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {createCollectionAction} from '../../../store/saga/collection/collection.sagaActions';
 import Field from '../../compounds/Field';
 import Form from '../../compounds/Form';
 import H1 from '../../elements/H1';
 import CenteredContainer from '../../elements/CenteredContainer';
+import {useCreateCollectionMutation} from '../../../store/api/collection.api';
 
 const NewCollectionForm = (): ReactElement => {
-    const dispatch = useDispatch();
     const [name, setName] = useState<string>('');
 
+    const [createCollection, {error}] = useCreateCollectionMutation();
+
     const handleSubmit = (): void => {
-        dispatch(createCollectionAction({name}));
+        createCollection({name});
     };
 
     return (
@@ -26,6 +26,7 @@ const NewCollectionForm = (): ReactElement => {
                     handleChange={(name, value) => setName(value as string)}
                 />
             </Form>
+            {error && <div>Error creating</div>}
         </CenteredContainer>
     );
 };

@@ -1,30 +1,35 @@
-import React, {ReactElement, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {ReactElement} from 'react';
 import {Link, useParams} from 'react-router-dom';
-import {collectionSelector} from '../../../store/reducer/collection/collection.selector';
-import {deleteCollectionAction, fetchCollectionAction} from '../../../store/saga/collection/collection.sagaActions';
+import {useDeleteCollectionMutation, useFetchCollectionQuery} from '../../../store/api/collection.api';
 
 const Collection = (): ReactElement => {
-    const dispatch = useDispatch();
     const {collectionId = ''} = useParams();
-    const {collection} = useSelector(collectionSelector);
 
-    useEffect(() => {
-        dispatch(fetchCollectionAction(collectionId));
-    }, [collectionId, dispatch]);
+    const {data: collection, error, isLoading} = useFetchCollectionQuery(collectionId);
+
+    const [deleteCollection, {error: deleteError}] = useDeleteCollectionMutation();
+
+    if (error) {
+        return <div>Error</div>;
+    }
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     const handleDelete = (): void => {
-        collection?.data._id && dispatch(deleteCollectionAction(collection.data._id));
+        collection?._id && deleteCollection(collection?._id);
     };
 
     return (
         <div>
             <div>
-                <p>{collection?.data?.name}</p>
+                <p>{collection?.name}</p>
                 <Link to={`/collections/${collectionId}/update`}>Edit</Link>
                 <button type="button" onClick={handleDelete}>
                     Delete
                 </button>
+                {deleteError && <div>Error deleting</div>}
             </div>
         </div>
     );

@@ -1,13 +1,13 @@
 import React, {ReactElement, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {userRegisterAction} from '../../../store/saga/auth/auth.sagaActions';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
 import H1 from '../../elements/H1';
 import CenteredContainer from '../../elements/CenteredContainer';
+import {useRegisterMutation} from '../../../store/api/auth.api';
 
 const Register = (): ReactElement => {
-    const dispatch = useDispatch();
+    const [register, {error}] = useRegisterMutation();
+
     const [registerUser, setRegisterUser] = useState({
         name: '',
         email: '',
@@ -23,7 +23,7 @@ const Register = (): ReactElement => {
     };
 
     const handleSubmit = (): void => {
-        dispatch(userRegisterAction(registerUser));
+        register(registerUser);
     };
 
     return (
@@ -58,6 +58,7 @@ const Register = (): ReactElement => {
                     value={registerUser.confirmedPassword}
                     handleChange={handleChange}
                 />
+                {error && <p>Error</p>}
             </Form>
         </CenteredContainer>
     );

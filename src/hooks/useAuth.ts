@@ -1,8 +1,8 @@
 import {useSelector} from 'react-redux';
-import {authSelector} from '../store/reducer/auth/auth.selector';
 import {IUser} from '../types/IUser';
+import {authSelector} from '../store/auth.reducer';
 
 export const useAuth = (): {loggedIn: boolean; loggedUser?: IUser} => {
-    const {loggedIn, loggedUser} = useSelector(authSelector);
-    return {loggedIn, loggedUser};
+    const {loggedIn} = useSelector(authSelector);
+    return {loggedIn};
 };

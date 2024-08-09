@@ -31,6 +31,10 @@ export interface IToken {
     scope: string;
 }
 
+export interface ITokenResponse {
+    token: string;
+}
+
 /* export enum UserRole {
     ADMIN = 'admin',
     USER = 'user',
