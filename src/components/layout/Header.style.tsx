@@ -11,14 +11,13 @@ export const HeaderContainerStyled = styled.header`
     font-size: 1.3em;
 `;
 
-export const HeaderLeftBoxStyled = styled.div`
-    display: flex;
-`;
-
-export const HeaderRightBoxStyled = styled.div`
+export const HeaderBoxStyled = styled.div`
     display: flex;
 `;
 
 export const HeaderItemStyled = styled.div`
-    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
 `;

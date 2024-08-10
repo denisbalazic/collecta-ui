@@ -1,11 +1,14 @@
 import React, {ReactElement} from 'react';
-import {NavLink} from 'react-router-dom';
-import {HeaderContainerStyled, HeaderItemStyled, HeaderLeftBoxStyled, HeaderRightBoxStyled} from './Header.style';
+import {HeaderContainerStyled, HeaderItemStyled, HeaderBoxStyled} from './Header.style';
 import {useLogoutMutation} from '../../store/api/auth.api';
 import Button from '../elements/Button';
+import IconButton from '../elements/IconButton';
+import {useAuth} from '../../hooks/useAuth';
 
 const Header = (): ReactElement => {
     const [logout] = useLogoutMutation();
+
+    const {loggedIn} = useAuth();
 
     const handleLogout = (): void => {
         logout();
@@ -13,33 +16,38 @@ const Header = (): ReactElement => {
 
     return (
         <HeaderContainerStyled>
-            <HeaderLeftBoxStyled>
+            <HeaderBoxStyled>
                 <HeaderItemStyled>
                     <Button to="/">Home</Button>
                 </HeaderItemStyled>
-            </HeaderLeftBoxStyled>
+            </HeaderBoxStyled>
 
-            <HeaderItemStyled>
-                <Button to="/collections">Explore</Button>
-            </HeaderItemStyled>
+            <HeaderBoxStyled>
+                <HeaderItemStyled>
+                    <Button to="/collections">Explore</Button>
+                </HeaderItemStyled>
+            </HeaderBoxStyled>
 
-            <HeaderRightBoxStyled>
-                <HeaderItemStyled>
-                    <Button secondary transparent to="/register">
-                        Register
-                    </Button>
-                </HeaderItemStyled>
-                <HeaderItemStyled>
-                    <Button secondary transparent to="/login">
-                        Login
-                    </Button>
-                </HeaderItemStyled>
-                <HeaderItemStyled>
-                    <Button secondary transparent icon="fe:logout" onClick={handleLogout}>
-                        Logout
-                    </Button>
-                </HeaderItemStyled>
-            </HeaderRightBoxStyled>
+            <HeaderBoxStyled>
+                {!loggedIn ? (
+                    <>
+                        <HeaderItemStyled>
+                            <Button secondary transparent to="/register">
+                                Register
+                            </Button>
+                        </HeaderItemStyled>
+                        <HeaderItemStyled>
+                            <Button secondary transparent to="/login">
+                                Login
+                            </Button>
+                        </HeaderItemStyled>
+                    </>
+                ) : (
+                    <HeaderItemStyled>
+                        <IconButton secondary icon="fe:logout" onClick={handleLogout} />
+                    </HeaderItemStyled>
+                )}
+            </HeaderBoxStyled>
         </HeaderContainerStyled>
     );
 };
