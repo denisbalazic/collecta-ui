@@ -14,6 +14,7 @@ export interface BasicTheme extends DefaultTheme {
     layout: {
         headerHeight: string;
         footerHeight: string;
+        btnHeight: string;
     };
     breakpoint: {
         xs: string;

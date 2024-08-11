@@ -13,11 +13,13 @@ export const HeaderContainerStyled = styled.header`
 
 export const HeaderBoxStyled = styled.div`
     display: flex;
+    align-items: center;
+    gap: 5px;
 `;
 
-export const HeaderItemStyled = styled.div`
+export const HeaderLeftBoxStyled = styled.div`
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5px;
+    align-items: baseline;
+    gap: 1rem;
+    font-size: 1.625rem;
 `;

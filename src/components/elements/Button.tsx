@@ -51,6 +51,7 @@ const StyledButton = styled.button<StyledButtonProps>`
     justify-content: center;
     align-items: center;
     width: ${({$fullWidth}) => ($fullWidth ? '100%' : 'auto')};
+    height: ${({theme}) => theme.layout.btnHeight};
     padding: 0.375rem 1rem;
     border: ${({$transparent, $secondary, theme}) => {
         if ($transparent && $secondary) return `1px solid white`;
@@ -58,7 +59,7 @@ const StyledButton = styled.button<StyledButtonProps>`
         if ($secondary) return `1px solid ${theme.color.primary}`;
         return `1px solid ${theme.color.primary}`;
     }};
-    border-radius: 0.5rem;
+    border-radius: 5px;
     font-size: ${({$size}) => {
         if ($size === 'sm') return '0.75rem';
         if ($size === 'lg') return '1.25rem';

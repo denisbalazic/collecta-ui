@@ -14,6 +14,7 @@ const theme: BasicTheme = {
     layout: {
         headerHeight: '60px',
         footerHeight: '60px',
+        btnHeight: '2.5rem',
     },
     breakpoint: {
         xs: '(max-width: 400px)', // for small screen mobile
