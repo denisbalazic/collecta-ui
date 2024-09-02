@@ -19,20 +19,9 @@ export interface IAuthCredentials {
     password: string;
 }
 
-export interface IToken {
-    // eslint-disable-next-line camelcase
-    access_token: string;
-    // eslint-disable-next-line camelcase
-    token_type: string;
-    // eslint-disable-next-line camelcase
-    refresh_token: string;
-    // eslint-disable-next-line camelcase
-    expires_in: number;
-    scope: string;
-}
-
 export interface ITokenResponse {
-    token: string;
+    accessToken: string;
+    refreshToken: string;
 }
 
 /* export enum UserRole {

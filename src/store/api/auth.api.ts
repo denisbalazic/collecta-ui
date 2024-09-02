@@ -1,10 +1,10 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
-import {removeLocalToken, setLocalToken} from '../../service/auth.service';
+import {removeLocalTokens, setLocalTokens} from '../../service/auth.service';
 import {IAuthCredentials, IRegisterUser, ITokenResponse} from '../../types/IUser';
 import {setRedirectAction} from '../common.reducer';
 import {fetchUserAction} from './user.api';
 import {setLoggedIn, setRegistered} from '../auth.reducer';
-import {baseQuery} from '../utils';
+import {baseQueryWithReauth} from '../utils';
 import {AppDispatch} from '../store';
 
 const onLoginSuccess = async (
@@ -14,22 +14,22 @@ const onLoginSuccess = async (
 ): Promise<void> => {
     try {
         const {data} = await queryFulfilled;
-        if (data.token) {
-            setLocalToken(data.token);
+        if (data.accessToken && data.refreshToken) {
+            setLocalTokens(data);
             dispatch(setLoggedIn(true));
             isRegister && dispatch(setRegistered());
             dispatch(fetchUserAction());
             dispatch(setRedirectAction('/collections'));
         }
     } catch (error) {
-        removeLocalToken();
+        removeLocalTokens();
         dispatch(setLoggedIn(false));
     }
 };
 
 export const authApi = createApi({
     reducerPath: 'authApi',
-    baseQuery,
+    baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         register: builder.mutation<ITokenResponse, IRegisterUser>({
             query: (registerUser) => ({
@@ -59,7 +59,7 @@ export const authApi = createApi({
             onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
                 try {
                     await queryFulfilled;
-                    removeLocalToken();
+                    removeLocalTokens();
                     dispatch(setLoggedIn(false));
                     dispatch(setRedirectAction('/'));
                     // TODO: Reset reducer; remove all sensitive data

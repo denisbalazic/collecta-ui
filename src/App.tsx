@@ -3,8 +3,11 @@ import {ThemeProvider} from 'styled-components';
 import Router from './router/Router';
 import GlobalStyle from './styles/global.style';
 import theme from './styles/theme.style';
+import {useInitializeApp} from './hooks/useInitializeApp';
 
 const App = (): ReactElement => {
+    useInitializeApp();
+
     return (
         <ThemeProvider theme={theme}>
             <GlobalStyle />
