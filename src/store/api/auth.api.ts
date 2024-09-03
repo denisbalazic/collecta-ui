@@ -3,7 +3,7 @@ import {removeLocalTokens, setLocalTokens} from '../../service/auth.service';
 import {IAuthCredentials, IRegisterUser, ITokenResponse} from '../../types/IUser';
 import {setRedirectAction} from '../common.reducer';
 import {fetchUserAction} from './user.api';
-import {setLoggedIn, setRegistered} from '../auth.reducer';
+import {setLoggedIn, setRegistered, setVerified} from '../auth.reducer';
 import {baseQueryWithReauth} from '../utils';
 import {AppDispatch} from '../store';
 
@@ -68,7 +68,40 @@ export const authApi = createApi({
                 }
             },
         }),
+        logoutAll: builder.mutation<void, void>({
+            query: () => ({
+                url: '/auth/logout-all',
+                method: 'POST',
+            }),
+            // TODO: Make it logout all except current session (api needs to be updated)
+            onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
+                try {
+                    await queryFulfilled;
+                    removeLocalTokens();
+                    dispatch(setLoggedIn(false));
+                    dispatch(setRedirectAction('/'));
+                } catch (error) {
+                    // Handle error
+                }
+            },
+        }),
+        verifyEmail: builder.mutation<void, string>({
+            query: (token) => ({
+                url: '/auth/verify',
+                method: 'POST',
+                body: {token},
+            }),
+            onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
+                try {
+                    await queryFulfilled;
+                    dispatch(setVerified());
+                    dispatch(setRedirectAction('/login'));
+                } catch (error) {
+                    // Handle error
+                }
+            },
+        }),
     }),
 });
 
-export const {useRegisterMutation, useLoginMutation, useLogoutMutation} = authApi;
+export const {useRegisterMutation, useLoginMutation, useLogoutMutation, useVerifyEmailMutation} = authApi;

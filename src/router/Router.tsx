@@ -13,6 +13,7 @@ import NotFound from '../components/views/NotFound';
 import RedirectWrapper from '../components/functional/RedirectWrapper';
 import {useAuth} from '../hooks/useAuth';
 import AboutPage from '../components/views/AboutPage';
+import VerifyEmail from '../components/views/auth/VerifyEmail';
 
 const Router = (): ReactElement => {
     const {loggedIn} = useAuth();
@@ -30,6 +31,7 @@ const Router = (): ReactElement => {
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
+                        <Route path="/verify-email/:token" element={<VerifyEmail />} />
                         <Route path="/collections" element={<Collections />} />
                         <Route isPrivate path="/collections/new" element={<NewCollectionForm />} />
                         <Route isPrivate path="/collections/:collectionId/update" element={<EditCollectionForm />} />

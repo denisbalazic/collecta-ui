@@ -6,7 +6,7 @@ interface FieldProps {
     value: string | number;
     label?: string;
     placeholder?: string;
-    errorMsg?: string;
+    errorMsg?: Record<string, string>;
     handleChange: (name: string, value: string | number) => void;
 }
 
@@ -22,7 +22,7 @@ const Field = ({name, value, label, placeholder, errorMsg, handleChange}: FieldP
                 placeholder={placeholder}
                 onChange={(e) => handleChange(name, e.target.value)}
             />
-            {errorMsg && <FieldMessageStyled>{errorMsg}</FieldMessageStyled>}
+            {errorMsg && <FieldMessageStyled>{errorMsg[name]}</FieldMessageStyled>}
         </FieldStyled>
     );
 };

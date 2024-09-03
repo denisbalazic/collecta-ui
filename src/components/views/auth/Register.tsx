@@ -1,4 +1,5 @@
 import React, {ReactElement, useState} from 'react';
+import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
 import H1 from '../../elements/H1';
@@ -6,14 +7,15 @@ import CenteredContainer from '../../elements/CenteredContainer';
 import {useRegisterMutation} from '../../../store/api/auth.api';
 
 const Register = (): ReactElement => {
-    const [register, {error}] = useRegisterMutation();
-
     const [registerUser, setRegisterUser] = useState({
         name: '',
         email: '',
         password: '',
         confirmedPassword: '',
     });
+
+    const [register, {error, isSuccess}] = useRegisterMutation();
+    const errorObj = (error as FetchBaseQueryError)?.data as Record<string, string>;
 
     const handleChange = (name: string, value: string | number): void => {
         setRegisterUser({
@@ -26,6 +28,10 @@ const Register = (): ReactElement => {
         register(registerUser);
     };
 
+    if (isSuccess) {
+        return <CenteredContainer>Email has been sent to your email address to verify registration</CenteredContainer>;
+    }
+
     return (
         <CenteredContainer>
             <Form handleSubmit={handleSubmit}>
@@ -36,6 +42,7 @@ const Register = (): ReactElement => {
                     placeholder="name"
                     value={registerUser.name}
                     handleChange={handleChange}
+                    errorMsg={errorObj}
                 />
                 <Field
                     label="Email"
@@ -43,6 +50,7 @@ const Register = (): ReactElement => {
                     placeholder="email"
                     value={registerUser.email}
                     handleChange={handleChange}
+                    errorMsg={errorObj}
                 />
                 <Field
                     label="Password"
@@ -50,6 +58,7 @@ const Register = (): ReactElement => {
                     placeholder="password"
                     value={registerUser.password}
                     handleChange={handleChange}
+                    errorMsg={errorObj}
                 />
                 <Field
                     label="Confirm password"
@@ -57,8 +66,8 @@ const Register = (): ReactElement => {
                     placeholder="confirm password"
                     value={registerUser.confirmedPassword}
                     handleChange={handleChange}
+                    errorMsg={errorObj}
                 />
-                {error && <p>Error</p>}
             </Form>
         </CenteredContainer>
     );

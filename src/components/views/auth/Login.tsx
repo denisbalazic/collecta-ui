@@ -1,12 +1,15 @@
 import React, {ReactElement, useState} from 'react';
+import {useSelector} from 'react-redux';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
 import H1 from '../../elements/H1';
 import CenteredContainer from '../../elements/CenteredContainer';
 import {useLoginMutation} from '../../../store/api/auth.api';
+import {authSelector} from '../../../store/auth.reducer';
 
 const Login = (): ReactElement => {
     const [login, {error}] = useLoginMutation();
+    const {emailVerified} = useSelector(authSelector);
 
     const [authCredentials, setAuthCredentials] = useState({
         email: '',
@@ -26,6 +29,7 @@ const Login = (): ReactElement => {
 
     return (
         <CenteredContainer>
+            {emailVerified && <CenteredContainer>Email has been verified, you can now log in</CenteredContainer>}
             <Form handleSubmit={handleSubmit}>
                 <H1>Log in</H1>
                 <Field
