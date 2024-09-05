@@ -14,6 +14,8 @@ import RedirectWrapper from '../components/functional/RedirectWrapper';
 import {useAuth} from '../hooks/useAuth';
 import AboutPage from '../components/views/AboutPage';
 import VerifyEmail from '../components/views/auth/VerifyEmail';
+import ForgotPassword from '../components/views/auth/ForgotPassword';
+import ResetPassword from '../components/views/auth/ResetPassword';
 
 const Router = (): ReactElement => {
     const {loggedIn} = useAuth();
@@ -32,6 +34,8 @@ const Router = (): ReactElement => {
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/verify-email/:token" element={<VerifyEmail />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/reset-password/:token" element={<ResetPassword />} />
                         <Route path="/collections" element={<Collections />} />
                         <Route isPrivate path="/collections/new" element={<NewCollectionForm />} />
                         <Route isPrivate path="/collections/:collectionId/update" element={<EditCollectionForm />} />

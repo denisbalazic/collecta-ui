@@ -1,6 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {removeLocalTokens, setLocalTokens} from '../../service/auth.service';
-import {IAuthCredentials, IRegisterUser, ITokenResponse} from '../../types/IUser';
+import {IAuthCredentials, IRegisterUser, IResetPasswordDto, ITokenResponse} from '../../types/IUser';
 import {setRedirectAction} from '../common.reducer';
 import {fetchUserAction} from './user.api';
 import {setLoggedIn, setRegistered, setVerified} from '../auth.reducer';
@@ -101,7 +101,28 @@ export const authApi = createApi({
                 }
             },
         }),
+        forgotPassword: builder.mutation<void, string>({
+            query: (email) => ({
+                url: '/auth/forgot-password',
+                method: 'POST',
+                body: {email},
+            }),
+        }),
+        resetPassword: builder.mutation<void, IResetPasswordDto>({
+            query: ({token, password, confirmedPassword}) => ({
+                url: '/auth/reset-password',
+                method: 'POST',
+                body: {token, password, confirmedPassword},
+            }),
+        }),
     }),
 });
 
-export const {useRegisterMutation, useLoginMutation, useLogoutMutation, useVerifyEmailMutation} = authApi;
+export const {
+    useRegisterMutation,
+    useLoginMutation,
+    useLogoutMutation,
+    useVerifyEmailMutation,
+    useForgotPasswordMutation,
+    useResetPasswordMutation,
+} = authApi;

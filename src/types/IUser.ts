@@ -19,6 +19,12 @@ export interface IAuthCredentials {
     password: string;
 }
 
+export interface IResetPasswordDto {
+    password: string;
+    confirmedPassword: string;
+    token: string;
+}
+
 export interface ITokenResponse {
     accessToken: string;
     refreshToken: string;

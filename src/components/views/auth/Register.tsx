@@ -1,5 +1,6 @@
 import React, {ReactElement, useState} from 'react';
 import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
+import {Link} from 'react-router-dom';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
 import H1 from '../../elements/H1';
@@ -61,14 +62,17 @@ const Register = (): ReactElement => {
                     errorMsg={errorObj}
                 />
                 <Field
-                    label="Confirm password"
+                    label="Repeat password"
                     name="confirmedPassword"
-                    placeholder="confirm password"
+                    placeholder="repeat password"
                     value={registerUser.confirmedPassword}
                     handleChange={handleChange}
                     errorMsg={errorObj}
                 />
             </Form>
+            <p>
+                Already have an account? <Link to="/login">Login</Link>
+            </p>
         </CenteredContainer>
     );
 };

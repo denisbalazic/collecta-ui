@@ -1,5 +1,6 @@
 import React, {ReactElement, useState} from 'react';
 import {useSelector} from 'react-redux';
+import {Link} from 'react-router-dom';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
 import H1 from '../../elements/H1';
@@ -48,6 +49,12 @@ const Login = (): ReactElement => {
                 />
                 {error && <p>Wrong credentials or sth else :)</p>}
             </Form>
+            <p>
+                Don&apos;t have an account? <Link to="/register">Register</Link>{' '}
+            </p>
+            <p>
+                Forgot your password? <Link to="/forgot-password">Reset password</Link>{' '}
+            </p>
         </CenteredContainer>
     );
 };
