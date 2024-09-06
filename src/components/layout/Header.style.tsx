@@ -5,22 +5,21 @@ export const HeaderContainerStyled = styled.header`
     display: flex;
     justify-content: space-between;
     align-content: center;
-    padding: 10px;
+    padding: 0 10px;
     background-color: ${(props) => props.theme.color.primary};
-    color: ${(props) => props.theme.color.basicLight} !important;
+    color: #fff;
     font-size: 1.3em;
+`;
+
+export const HeaderBoxStyled = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 5px;
 `;
 
 export const HeaderLeftBoxStyled = styled.div`
     display: flex;
-`;
-
-export const HeaderRightBoxStyled = styled.div`
-    display: flex;
-`;
-
-export const HeaderItemStyled = styled.div`
-    margin: 10px;
-    color: white;
-    border: 1px solid white;
+    align-items: baseline;
+    gap: 1rem;
+    font-size: 1.625rem;
 `;

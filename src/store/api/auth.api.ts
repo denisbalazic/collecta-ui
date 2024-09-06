@@ -60,7 +60,7 @@ export const authApi = createApi({
                 try {
                     await queryFulfilled;
                     removeLocalToken();
-                    setLoggedIn(false);
+                    dispatch(setLoggedIn(false));
                     dispatch(setRedirectAction('/'));
                     // TODO: Reset reducer; remove all sensitive data
                 } catch (error) {

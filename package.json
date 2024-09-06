@@ -10,6 +10,7 @@
         "lint": "eslint ./src --ext js,jsx,ts,tsx --fix"
     },
     "dependencies": {
+        "@iconify/react": "^5.0.2",
         "@redux-devtools/extension": "^3.3.0",
         "@reduxjs/toolkit": "^2.2.7",
         "@testing-library/jest-dom": "^5.15.0",
