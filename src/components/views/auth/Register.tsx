@@ -16,14 +16,7 @@ const Register = (): ReactElement => {
     });
 
     const [register, {error, isSuccess}] = useRegisterMutation();
-    const errorObj = (error as FetchBaseQueryError)?.data as Record<string, string>;
-
-    const handleChange = (name: string, value: string | number): void => {
-        setRegisterUser({
-            ...registerUser,
-            [name]: value,
-        });
-    };
+    const errorObj = (error as FetchBaseQueryError)?.data as Record<string, string[]>;
 
     const handleSubmit = (): void => {
         register(registerUser);
@@ -35,40 +28,12 @@ const Register = (): ReactElement => {
 
     return (
         <CenteredContainer>
-            <Form handleSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} formState={registerUser} onFormChange={setRegisterUser} error={errorObj}>
                 <H1>Register</H1>
-                <Field
-                    label="Name"
-                    name="name"
-                    placeholder="name"
-                    value={registerUser.name}
-                    handleChange={handleChange}
-                    errorMsg={errorObj}
-                />
-                <Field
-                    label="Email"
-                    name="email"
-                    placeholder="email"
-                    value={registerUser.email}
-                    handleChange={handleChange}
-                    errorMsg={errorObj}
-                />
-                <Field
-                    label="Password"
-                    name="password"
-                    placeholder="password"
-                    value={registerUser.password}
-                    handleChange={handleChange}
-                    errorMsg={errorObj}
-                />
-                <Field
-                    label="Repeat password"
-                    name="confirmedPassword"
-                    placeholder="repeat password"
-                    value={registerUser.confirmedPassword}
-                    handleChange={handleChange}
-                    errorMsg={errorObj}
-                />
+                <Field name="name" label="Name" placeholder="name" />
+                <Field name="email" label="Email" placeholder="email" />
+                <Field name="password" label="Password" placeholder="password" />
+                <Field name="confirmedPassword" label="Repeat password" placeholder="repeat password" />
             </Form>
             <p>
                 Already have an account? <Link to="/login">Login</Link>

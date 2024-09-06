@@ -26,9 +26,9 @@ const EditCollectionForm = (): ReactElement => {
 
     return (
         <CenteredContainer>
-            <Form handleSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
                 <H1>Update collection</H1>
-                <Field label="Name" name="name" value={name} handleChange={(name, value) => setName(value as string)} />
+                <Field label="Name" name="name" value={name} onChange={(name, value) => setName(value as string)} />
             </Form>
             {updateError && <div>Error updating</div>}
         </CenteredContainer>

@@ -16,9 +16,9 @@ const ForgotPassword = () => {
 
     return (
         <CenteredContainer>
-            <Form handleSubmit={() => mutate(email)}>
+            <Form onSubmit={() => mutate(email)}>
                 <H1>Forgot password</H1>
-                <Field label="Email" name="email" placeholder="email" value={email} handleChange={(v) => setEmail(v)} />
+                <Field label="Email" name="email" placeholder="email" value={email} onChange={(v) => setEmail(v)} />
                 {error && <p>Email does not exist or sth else :)</p>}
             </Form>
         </CenteredContainer>

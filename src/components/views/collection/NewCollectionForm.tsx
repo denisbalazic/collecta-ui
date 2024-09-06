@@ -16,14 +16,14 @@ const NewCollectionForm = (): ReactElement => {
 
     return (
         <CenteredContainer>
-            <Form handleSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
                 <H1>New collection</H1>
                 <Field
                     label="Name"
                     name="name"
                     placeholder="Name"
                     value={name}
-                    handleChange={(name, value) => setName(value as string)}
+                    onChange={(name, value) => setName(value as string)}
                 />
             </Form>
             {error && <div>Error creating</div>}

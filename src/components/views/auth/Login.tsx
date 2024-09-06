@@ -17,13 +17,6 @@ const Login = (): ReactElement => {
         password: '',
     });
 
-    const handleChange = (name: string, value: string | number): void => {
-        setAuthCredentials({
-            ...authCredentials,
-            [name]: value,
-        });
-    };
-
     const handleSubmit = (): void => {
         login(authCredentials);
     };
@@ -31,22 +24,10 @@ const Login = (): ReactElement => {
     return (
         <CenteredContainer>
             {emailVerified && <CenteredContainer>Email has been verified, you can now log in</CenteredContainer>}
-            <Form handleSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} formState={authCredentials} onFormChange={setAuthCredentials}>
                 <H1>Log in</H1>
-                <Field
-                    label="Email"
-                    name="email"
-                    placeholder="email"
-                    value={authCredentials.email}
-                    handleChange={handleChange}
-                />
-                <Field
-                    label="Password"
-                    name="password"
-                    placeholder="password"
-                    value={authCredentials.password}
-                    handleChange={handleChange}
-                />
+                <Field name="email" label="Email" placeholder="email" />
+                <Field name="password" label="Password" placeholder="password" />
                 {error && <p>Wrong credentials or sth else :)</p>}
             </Form>
             <p>

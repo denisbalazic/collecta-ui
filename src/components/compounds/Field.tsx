@@ -1,16 +1,16 @@
 import React, {ReactElement} from 'react';
 import {FieldMessageStyled, FieldStyled, InputLabelStyled, InputStyled} from './Field.style';
 
-interface FieldProps {
+export interface FieldProps {
     name: string;
-    value: string | number;
+    value?: string | number;
     label?: string;
     placeholder?: string;
-    errorMsg?: Record<string, string>;
-    handleChange: (name: string, value: string | number) => void;
+    errorMsg?: string[];
+    onChange?: (name: string, value: string | number) => void;
 }
 
-const Field = ({name, value, label, placeholder, errorMsg, handleChange}: FieldProps): ReactElement => {
+const Field = ({label, name, placeholder, value, onChange, errorMsg}: FieldProps): ReactElement => {
     return (
         <FieldStyled>
             {label && <InputLabelStyled htmlFor={name}>{label}</InputLabelStyled>}
@@ -20,9 +20,9 @@ const Field = ({name, value, label, placeholder, errorMsg, handleChange}: FieldP
                 name={name}
                 value={value}
                 placeholder={placeholder}
-                onChange={(e) => handleChange(name, e.target.value)}
+                onChange={(e) => onChange && onChange(name, e.target.value)}
             />
-            {errorMsg && <FieldMessageStyled>{errorMsg[name]}</FieldMessageStyled>}
+            {errorMsg && <FieldMessageStyled>{errorMsg}</FieldMessageStyled>}
         </FieldStyled>
     );
 };
