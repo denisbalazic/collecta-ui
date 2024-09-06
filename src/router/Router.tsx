@@ -1,7 +1,7 @@
 import React, {ReactElement} from 'react';
 import {BrowserRouter, Navigate} from 'react-router-dom';
 import {PrRoute as Route, PrRoutes as Routes} from 'protected-react-router';
-import Layout from '../components/layout/MainLayout';
+import MainLayout from '../components/layout/MainLayout';
 import Register from '../components/views/auth/Register';
 import Login from '../components/views/auth/Login';
 import Collections from '../components/views/collection/Collections';
@@ -28,7 +28,7 @@ const Router = (): ReactElement => {
                 notAuthenticatedAction={() => alert('you are not authenticated')}
             >
                 <Route element={<RedirectWrapper />}>
-                    <Route path="/" element={<Layout />}>
+                    <Route path="/" element={<MainLayout />}>
                         <Route index element={<Navigate to="/about" />} />
                         <Route path="/about" element={<AboutPage />} />
                         <Route path="/register" element={<Register />} />
