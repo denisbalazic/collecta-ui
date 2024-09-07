@@ -10,6 +10,7 @@ export interface BasicTheme extends DefaultTheme {
         secondaryLight: string;
         tertiary: string;
         background: string;
+        error: string;
     };
     layout: {
         headerHeight: string;

@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
-import H1 from '../../elements/H1';
+import {H1} from '../../elements/headers';
 import CenteredContainer from '../../elements/CenteredContainer';
 import {useLoginMutation} from '../../../store/api/auth.api';
 import {authSelector} from '../../../store/auth.reducer';

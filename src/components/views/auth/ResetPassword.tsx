@@ -2,7 +2,7 @@ import React, {ReactElement, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import CenteredContainer from '../../elements/CenteredContainer';
 import Form from '../../compounds/Form';
-import H1 from '../../elements/H1';
+import {H1} from '../../elements/headers';
 import Field from '../../compounds/Field';
 import {useResetPasswordMutation} from '../../../store/api/auth.api';
 

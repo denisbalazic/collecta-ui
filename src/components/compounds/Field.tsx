@@ -1,19 +1,22 @@
 import React, {ReactElement} from 'react';
 import {FieldMessageStyled, FieldStyled, InputLabelStyled, InputStyled} from './Field.style';
+import {FormFieldProps} from './Form';
 
-export interface FieldProps {
-    name: string;
-    value?: string | number;
+interface FieldProps extends FormFieldProps<string | number> {
     label?: string;
     placeholder?: string;
-    errorMsg?: string[];
-    onChange?: (name: string, value: string | number) => void;
 }
 
 const Field = ({label, name, placeholder, value, onChange, errorMsg}: FieldProps): ReactElement => {
+    const hasError = errorMsg && errorMsg.length > 0;
+
     return (
         <FieldStyled>
-            {label && <InputLabelStyled htmlFor={name}>{label}</InputLabelStyled>}
+            {label && (
+                <InputLabelStyled htmlFor={name} $hasError={hasError}>
+                    {label}
+                </InputLabelStyled>
+            )}
             <InputStyled
                 id={name}
                 type="text"
@@ -21,8 +24,9 @@ const Field = ({label, name, placeholder, value, onChange, errorMsg}: FieldProps
                 value={value}
                 placeholder={placeholder}
                 onChange={(e) => onChange && onChange(name, e.target.value)}
+                $hasError={hasError}
             />
-            {errorMsg && <FieldMessageStyled>{errorMsg}</FieldMessageStyled>}
+            <FieldMessageStyled $hasError={hasError}>{errorMsg?.join(', ')}</FieldMessageStyled>
         </FieldStyled>
     );
 };

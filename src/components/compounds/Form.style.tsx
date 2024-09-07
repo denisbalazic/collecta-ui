@@ -4,10 +4,13 @@ export const FormStyled = styled.form`
     display: flex;
     flex-direction: column;
     align-content: stretch;
-    padding: 8px;
-    max-width: 400px;
+    max-width: 600px;
 
     > H1 {
         text-align: center;
+    }
+
+    > Button {
+        margin-top: 12px;
     }
 `;

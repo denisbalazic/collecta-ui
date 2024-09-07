@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled, {css, keyframes} from 'styled-components/macro';
 import React, {ReactElement, ReactNode} from 'react';
 import {Link} from 'react-router-dom';
 import {Icon} from '@iconify/react';
@@ -17,6 +17,7 @@ interface BaseButtonProps {
 
 interface PlainButtonProps extends BaseButtonProps {
     type?: 'button' | 'reset' | 'submit';
+    spinner?: boolean;
     to?: never;
     href?: never;
     target?: never;
@@ -27,6 +28,7 @@ interface LinkButtonProps extends BaseButtonProps {
     target?: string;
     href?: never;
     type?: never;
+    spinner?: never;
 }
 
 interface AnchorButtonProps extends BaseButtonProps {
@@ -34,6 +36,7 @@ interface AnchorButtonProps extends BaseButtonProps {
     target?: string;
     to?: never;
     type?: never;
+    spinner?: never;
 }
 
 type ButtonProps = PlainButtonProps | LinkButtonProps | AnchorButtonProps;
@@ -43,6 +46,7 @@ interface StyledButtonProps {
     $secondary?: boolean;
     $transparent?: boolean;
     $fullWidth?: boolean;
+    $spinner?: boolean;
     disabled?: boolean;
 }
 
@@ -86,6 +90,32 @@ const StyledButton = styled.button<StyledButtonProps>`
     svg {
         margin-right: 0.5rem;
     }
+
+    /* Spinner styles */
+    position: relative;
+    ${({$spinner}) =>
+        $spinner &&
+        css`
+            &::after {
+                content: '';
+                position: absolute;
+                width: 1rem;
+                height: 1rem;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-top-color: white;
+                border-radius: 50%;
+                animation: ${keyframes`
+                    0% {
+                        transform: rotate(0deg);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                `} 0.6s linear infinite;
+            }
+            color: transparent;
+            pointer-events: none;
+        `}
 `;
 
 const Button = ({
@@ -96,6 +126,7 @@ const Button = ({
     size = 'md',
     secondary,
     transparent,
+    spinner,
     fullWidth,
     target,
     children,
@@ -106,6 +137,7 @@ const Button = ({
         $secondary: secondary,
         $transparent: transparent,
         $fullWidth: fullWidth,
+        $spinner: spinner,
     };
 
     if (to) {

@@ -1,7 +1,7 @@
 import React, {ReactElement, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import Form from '../../compounds/Form';
-import H1 from '../../elements/H1';
+import {H1} from '../../elements/headers';
 import Field from '../../compounds/Field';
 import CenteredContainer from '../../elements/CenteredContainer';
 import {useFetchCollectionQuery, useUpdateCollectionMutation} from '../../../store/api/collection.api';

@@ -18,6 +18,8 @@ interface FormProps {
     onFormChange?: React.SetStateAction<any>;
     error?: Record<string, string[]>;
     onSubmit: () => void;
+    disabled?: boolean;
+    isLoading?: boolean;
 }
 
 /**
@@ -34,8 +36,18 @@ interface FormProps {
  * @param {React.SetStateAction<any>} onFormChange - The form change handler, needs to be passed setter to form state.
  * @param {Record<string, string[]>} error - The form error.
  * @param {() => void} onSubmit - The submit handler.
+ * @param {boolean} [disabled] - The disabled state of the form.
+ * @param {boolean} [isLoading] - The loading state of the form, spinner will be shown on submit button.
  */
-const Form = ({formState, onFormChange, error, onSubmit, children}: PropsWithChildren<FormProps>): ReactElement => {
+const Form = ({
+    formState,
+    onFormChange,
+    error,
+    onSubmit,
+    disabled,
+    isLoading,
+    children,
+}: PropsWithChildren<FormProps>): ReactElement => {
     const checkAllowedFields = (type: string | React.JSXElementConstructor<unknown>): boolean =>
         enhanceableFields.some((field) => field === type);
 
@@ -68,6 +80,8 @@ const Form = ({formState, onFormChange, error, onSubmit, children}: PropsWithChi
                     e.preventDefault();
                     onSubmit();
                 }}
+                disabled={disabled || isLoading}
+                spinner={isLoading}
             >
                 Submit
             </Button>
