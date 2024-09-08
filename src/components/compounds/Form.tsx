@@ -9,6 +9,7 @@ export interface FormFieldProps<T extends string | number | boolean = string | n
     value?: T;
     onChange?: (name: string, value: T) => void;
     errorMsg?: string[];
+    disabled?: boolean;
 }
 
 const enhanceableFields = [Field, Checkbox];
@@ -66,6 +67,7 @@ const Form = ({
                         onFormChange({...formState, [name]: value});
                     },
                     errorMsg: child.props.errorMsg || (error && error[child.props.name]),
+                    disabled: child.props.disabled || disabled || isLoading,
                 });
             }
             return child as ReactElement;

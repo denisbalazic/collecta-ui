@@ -7,6 +7,8 @@ import CenteredContainer from '../../elements/CenteredContainer';
 import {useRegisterMutation} from '../../../store/api/auth.api';
 import Checkbox from '../../compounds/Checkbox';
 import InfoBox from '../../compounds/InfoBox';
+import {H2} from '../../elements/headers';
+import {Strong} from '../../elements/Strong';
 
 const Register = (): ReactElement => {
     const [registerUser, setRegisterUser] = useState({
@@ -20,15 +22,11 @@ const Register = (): ReactElement => {
     const [register, {isSuccess, isLoading, error}] = useRegisterMutation();
     const errorObj = (error as FetchBaseQueryError)?.data as Record<string, string[]>;
 
-    const handleSubmit = (): void => {
-        register(registerUser);
-    };
-
     return (
         <CenteredContainer>
             <InfoBox
                 title="Register"
-                content={
+                subtitle={
                     <>
                         <p>...to access all features we have to offer ;)</p>
                         Already have an account? <Link to="/login">Login</Link>
@@ -37,7 +35,7 @@ const Register = (): ReactElement => {
             >
                 {!isSuccess ? (
                     <Form
-                        onSubmit={handleSubmit}
+                        onSubmit={() => register(registerUser)}
                         formState={registerUser}
                         onFormChange={setRegisterUser}
                         error={errorObj}
@@ -64,10 +62,10 @@ const Register = (): ReactElement => {
                         />
                     </Form>
                 ) : (
-                    <p>
-                        Thank you for signing up! We&apos;ve sent an email to <strong>{registerUser.email}</strong>.
-                        Please click the link in the email to complete registration.
-                    </p>
+                    <H2>
+                        Thank you for signing up! We&apos;ve sent an email to <Strong>{registerUser.email}</Strong>.
+                        Please click the link in the email to complete registration. Link will be valid for 1 hour.
+                    </H2>
                 )}
             </InfoBox>
         </CenteredContainer>

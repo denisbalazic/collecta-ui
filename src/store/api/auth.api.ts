@@ -5,27 +5,6 @@ import {setRedirectAction} from '../common.reducer';
 import {fetchUserAction} from './user.api';
 import {setLoggedIn, setRegistered, setVerified} from '../auth.reducer';
 import {baseQueryWithReauth} from '../utils';
-import {AppDispatch} from '../store';
-
-const onLoginSuccess = async (
-    queryFulfilled: Promise<{data: ITokenResponse}>,
-    dispatch: AppDispatch,
-    isRegister?: boolean
-): Promise<void> => {
-    try {
-        const {data} = await queryFulfilled;
-        if (data.accessToken && data.refreshToken) {
-            setLocalTokens(data);
-            dispatch(setLoggedIn(true));
-            isRegister && dispatch(setRegistered());
-            dispatch(fetchUserAction());
-            dispatch(setRedirectAction('/collections'));
-        }
-    } catch (error) {
-        removeLocalTokens();
-        dispatch(setLoggedIn(false));
-    }
-};
 
 export const authApi = createApi({
     reducerPath: 'authApi',
@@ -38,7 +17,9 @@ export const authApi = createApi({
                 body: registerUser,
             }),
             onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
-                await onLoginSuccess(queryFulfilled, dispatch, true);
+                await queryFulfilled;
+                // TODO: Investigate if we need this
+                dispatch(setRegistered());
             },
         }),
         login: builder.mutation<ITokenResponse, IAuthCredentials>({
@@ -48,7 +29,18 @@ export const authApi = createApi({
                 body: credentials,
             }),
             onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
-                await onLoginSuccess(queryFulfilled, dispatch);
+                try {
+                    const {data} = await queryFulfilled;
+                    if (data.accessToken && data.refreshToken) {
+                        setLocalTokens(data);
+                        dispatch(setLoggedIn(true));
+                        dispatch(fetchUserAction());
+                        dispatch(setRedirectAction('/collections'));
+                    }
+                } catch (error) {
+                    removeLocalTokens();
+                    dispatch(setLoggedIn(false));
+                }
             },
         }),
         logout: builder.mutation<void, void>({
@@ -56,9 +48,8 @@ export const authApi = createApi({
                 url: '/auth/logout',
                 method: 'POST',
             }),
-            onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
+            onQueryStarted: async (arg, {dispatch}) => {
                 try {
-                    await queryFulfilled;
                     removeLocalTokens();
                     dispatch(setLoggedIn(false));
                     dispatch(setRedirectAction('/'));
@@ -87,9 +78,8 @@ export const authApi = createApi({
         }),
         verifyEmail: builder.mutation<void, string>({
             query: (token) => ({
-                url: '/auth/verify',
+                url: `/auth/verify?token=${token}`,
                 method: 'POST',
-                body: {token},
             }),
             onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
                 try {
@@ -114,6 +104,14 @@ export const authApi = createApi({
                 method: 'POST',
                 body: {token, password, confirmedPassword},
             }),
+            onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
+                try {
+                    await queryFulfilled;
+                    dispatch(setRedirectAction('/login'));
+                } catch (error) {
+                    // Handle error
+                }
+            },
         }),
     }),
 });

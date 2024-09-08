@@ -4,10 +4,10 @@ import {H1} from '../elements/headers';
 
 interface InfoBoxProps {
     title: string;
-    content?: string | ReactElement;
+    subtitle?: string | ReactElement;
 }
 
-const InfoBox = ({title, content, children}: PropsWithChildren<InfoBoxProps>): ReactElement => {
+const InfoBox = ({title, subtitle, children}: PropsWithChildren<InfoBoxProps>): ReactElement => {
     const containerRef = React.createRef<HTMLDivElement>();
     const [containerHeight, setContainerHeight] = useState<string>();
 
@@ -38,7 +38,7 @@ const InfoBox = ({title, content, children}: PropsWithChildren<InfoBoxProps>): R
         <InfoBoxStyled>
             <InfoBoxHeaderStyled>
                 <H1> {title} </H1>
-                <div> {content} </div>
+                <div> {subtitle} </div>
             </InfoBoxHeaderStyled>
             <InfoBoxBodyStyled $containerHeight={containerHeight}>
                 <div ref={containerRef}>{children}</div>
