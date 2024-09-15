@@ -48,6 +48,7 @@ const Form = ({
     disabled,
     isLoading,
     children,
+    ...rest
 }: PropsWithChildren<FormProps>): ReactElement => {
     const checkAllowedFields = (type: string | React.JSXElementConstructor<unknown>): boolean =>
         enhanceableFields.some((field) => field === type);
@@ -74,7 +75,7 @@ const Form = ({
         }) ?? [];
 
     return (
-        <FormStyled>
+        <FormStyled {...rest}>
             {formState && onFormChange ? enhanceFields() : children}
             <Button
                 type="submit"

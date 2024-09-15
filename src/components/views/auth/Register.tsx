@@ -40,6 +40,7 @@ const Register = (): ReactElement => {
                         onFormChange={setRegisterUser}
                         error={errorObj}
                         isLoading={isLoading}
+                        data-testid="register-form"
                     >
                         <Field name="name" label="Name" placeholder="name" />
                         <Field name="email" label="Email" placeholder="email" />
@@ -62,7 +63,7 @@ const Register = (): ReactElement => {
                         />
                     </Form>
                 ) : (
-                    <H2>
+                    <H2 data-testid="register-success">
                         Thank you for signing up! We&apos;ve sent an email to <Strong>{registerUser.email}</Strong>.
                         Please click the link in the email to complete registration. Link will be valid for 1 hour.
                     </H2>

@@ -16,11 +16,6 @@ export const authApi = createApi({
                 method: 'POST',
                 body: registerUser,
             }),
-            onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
-                await queryFulfilled;
-                // TODO: Investigate if we need this
-                dispatch(setRegistered());
-            },
         }),
         login: builder.mutation<ITokenResponse, IAuthCredentials>({
             query: (credentials) => ({

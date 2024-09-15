@@ -7,7 +7,8 @@
         "start": "vite",
         "build": "tsc && vite build",
         "serve": "vite preview",
-        "lint": "eslint ./src --ext js,jsx,ts,tsx --fix"
+        "lint": "eslint ./src --ext js,jsx,ts,tsx --fix",
+        "cypress:open": "cypress open"
     },
     "dependencies": {
         "@iconify/react": "^5.0.2",
@@ -48,10 +49,12 @@
         "@typescript-eslint/eslint-plugin": "^5.4.0",
         "@typescript-eslint/parser": "^5.4.0",
         "babel-plugin-macros": "^3.1.0",
+        "cypress": "^13.14.2",
         "eslint": "^7.32.0",
         "eslint-config-airbnb": "^19.0.0",
         "eslint-config-prettier": "^8.3.0",
         "eslint-import-resolver-typescript": "^2.5.0",
+        "eslint-plugin-cypress": "^3.5.0",
         "eslint-plugin-import": "^2.25.3",
         "eslint-plugin-jsx-a11y": "^6.5.1",
         "eslint-plugin-prettier": "^4.0.0",
