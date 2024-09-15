@@ -10,7 +10,7 @@ const theme: BasicTheme = {
         secondaryLight: '#edf5e5',
         tertiary: '#8b8c89',
         background: '#f5f5f5',
-        error: '#ff0000',
+        error: '#f15252',
     },
     layout: {
         headerHeight: '60px',
