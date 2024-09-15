@@ -38,7 +38,7 @@ export const FieldMessageStyled = styled.div<FieldStyledProps>`
     font-style: italic;
     color: ${(props) => (props.$hasError ? props.theme.color.error : props.theme.color.primary)};
 
-    height: ${(props) => (props.$hasError ? '1rem' : '0')};
+    height: ${(props) => (props.$hasError ? 'auto' : '0')};
     opacity: ${(props) => (props.$hasError ? '1' : '0')};
     overflow: hidden;
     transition: height 0.3s ease, opacity 0.3s ease;

@@ -1,6 +1,7 @@
 import React, {ReactElement, useState} from 'react';
 import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 import {Link} from 'react-router-dom';
+import {z} from 'zod';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
 import CenteredContainer from '../../elements/CenteredContainer';
@@ -10,8 +11,40 @@ import InfoBox from '../../compounds/InfoBox';
 import {H2} from '../../elements/headers';
 import {Strong} from '../../elements/Strong';
 
+const RegisterUserSchema = z
+    .object({
+        name: z
+            .string()
+            .min(2, {message: 'Name must have between 2 and 36 characters'})
+            .max(36, {message: 'Name must have between 2 and 36 characters'}),
+
+        email: z.string().email({message: 'Invalid email address'}),
+
+        password: z
+            .string()
+            .refine(
+                (val) =>
+                    val.length >= 8 && /[a-z]/.test(val) && /[A-Z]/.test(val) && /[0-9]/.test(val) && /[\W_]/.test(val),
+                {
+                    message:
+                        'Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol',
+                }
+            ),
+
+        confirmedPassword: z.string(),
+
+        termsConfirmed: z.boolean().refine((val) => val, {message: 'Terms must be confirmed'}),
+    })
+    .superRefine((val, ctx) => {
+        if (val.password !== val.confirmedPassword) {
+            ctx.addIssue({code: z.ZodIssueCode.custom, path: ['confirmedPassword'], message: 'Passwords do not match'});
+        }
+    });
+
+type RegisterUserDto = z.infer<typeof RegisterUserSchema>;
+
 const Register = (): ReactElement => {
-    const [registerUser, setRegisterUser] = useState({
+    const [registerUser, setRegisterUser] = useState<RegisterUserDto>({
         name: '',
         email: '',
         password: '',
@@ -38,6 +71,7 @@ const Register = (): ReactElement => {
                         onSubmit={() => register(registerUser)}
                         formState={registerUser}
                         onFormChange={setRegisterUser}
+                        validationSchema={RegisterUserSchema}
                         error={errorObj}
                         isLoading={isLoading}
                         data-testid="register-form"

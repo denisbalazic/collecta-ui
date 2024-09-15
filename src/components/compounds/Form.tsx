@@ -1,4 +1,5 @@
-import React, {Children, isValidElement, PropsWithChildren, ReactElement} from 'react';
+import React, {Children, isValidElement, PropsWithChildren, ReactElement, useState} from 'react';
+import {ZodError, ZodSchema} from 'zod';
 import Button from '../elements/Button';
 import {FormStyled} from './Form.style';
 import Field from './Field';
@@ -17,6 +18,7 @@ const enhanceableFields = [Field, Checkbox];
 interface FormProps {
     formState?: Record<string, string | number | boolean>;
     onFormChange?: React.SetStateAction<any>;
+    validationSchema?: ZodSchema<any>;
     error?: Record<string, string[]>;
     onSubmit: () => void;
     disabled?: boolean;
@@ -35,6 +37,7 @@ interface FormProps {
  * @component
  * @param {Record<string, string | number>} formState - The form state.
  * @param {React.SetStateAction<any>} onFormChange - The form change handler, needs to be passed setter to form state.
+ * @param {ZodSchema<any>} validationSchema - The form validation schema.
  * @param {Record<string, string[]>} error - The form error.
  * @param {() => void} onSubmit - The submit handler.
  * @param {boolean} [disabled] - The disabled state of the form.
@@ -43,6 +46,7 @@ interface FormProps {
 const Form = ({
     formState,
     onFormChange,
+    validationSchema,
     error,
     onSubmit,
     disabled,
@@ -50,6 +54,8 @@ const Form = ({
     children,
     ...rest
 }: PropsWithChildren<FormProps>): ReactElement => {
+    const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
+
     const checkAllowedFields = (type: string | React.JSXElementConstructor<unknown>): boolean =>
         enhanceableFields.some((field) => field === type);
 
@@ -67,29 +73,43 @@ const Form = ({
                         child.props.onChange && child.props.onChange(name, value);
                         onFormChange({...formState, [name]: value});
                     },
-                    errorMsg: child.props.errorMsg || (error && error[child.props.name]),
+                    errorMsg:
+                        child.props.errorMsg ||
+                        validationErrors[child.props.name] ||
+                        (error && error[child.props.name]),
                     disabled: child.props.disabled || disabled || isLoading,
                 });
             }
             return child as ReactElement;
         }) ?? [];
 
+    const mapZodToValidationErrors = (zodError: ZodError): Record<string, string[]> => {
+        const errors: Record<string, string[]> = {};
+        zodError.errors.forEach((e) => {
+            errors[e.path[0]] = [...(errors[e.path[0]] || []), e.message];
+        });
+        return errors;
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault();
+        if (validationSchema) {
+            const result = validationSchema.safeParse(formState);
+            if (!result.success) {
+                setValidationErrors(mapZodToValidationErrors(result.error));
+                return;
+            }
+        }
+        onSubmit();
+    };
+
     return (
-        <FormStyled {...rest}>
+        <FormStyled {...rest} onSubmit={handleSubmit}>
             {formState && onFormChange ? enhanceFields() : children}
-            <Button
-                type="submit"
-                onClick={(e) => {
-                    e.preventDefault();
-                    onSubmit();
-                }}
-                disabled={disabled || isLoading}
-                spinner={isLoading}
-            >
+            <Button type="submit" disabled={disabled || isLoading} spinner={isLoading}>
                 Submit
             </Button>
         </FormStyled>
     );
 };
-
 export default Form;
