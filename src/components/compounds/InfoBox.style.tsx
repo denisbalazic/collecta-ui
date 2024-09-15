@@ -30,6 +30,10 @@ export const InfoBoxHeaderStyled = styled.div<InfoBoxStyledProps>`
     > * {
         margin: 0.25rem 0;
     }
+
+    H1 {
+        text-align: center;
+    }
 `;
 
 export const InfoBoxBodyStyled = styled.div<InfoBoxStyledProps>`
