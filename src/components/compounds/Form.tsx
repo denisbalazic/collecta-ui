@@ -4,6 +4,7 @@ import Button from '../elements/Button';
 import {FormStyled} from './Form.style';
 import Field from './Field';
 import Checkbox from './Checkbox';
+import {mapZodToValidationErrors} from '../../utils/utils';
 
 export interface FormFieldProps<T extends string | number | boolean = string | number | boolean> {
     name: string;
@@ -11,6 +12,7 @@ export interface FormFieldProps<T extends string | number | boolean = string | n
     onChange?: (name: string, value: T) => void;
     errorMsg?: string[];
     disabled?: boolean;
+    required?: boolean;
 }
 
 const enhanceableFields = [Field, Checkbox];
@@ -31,6 +33,7 @@ interface FormProps {
  * It will provide field components with values and onChange handlers based on their 'name' prop ('name' corresponds to property of formState object).
  * It will update the formState on change.
  * If error is provided, it will provide fields with the error messages.
+ * It will check if all Fields with 'required' prop are filled before submitting the form.
  *
  * Fields that can be enhanced: Field, Checkbox.
  *
@@ -63,6 +66,7 @@ const Form = ({
         Children.map(children, (child): ReactElement => {
             if (
                 isValidElement<FormFieldProps>(child) &&
+                // TODO: Maybe next check is not needed; works without it; check it
                 checkAllowedFields(child.type) &&
                 child.props.name &&
                 formState
@@ -83,13 +87,14 @@ const Form = ({
             return child as ReactElement;
         }) ?? [];
 
-    const mapZodToValidationErrors = (zodError: ZodError): Record<string, string[]> => {
-        const errors: Record<string, string[]> = {};
-        zodError.errors.forEach((e) => {
-            errors[e.path[0]] = [...(errors[e.path[0]] || []), e.message];
-        });
-        return errors;
-    };
+    const requiredFieldNames = Children.toArray(children)
+        .filter(
+            (child): child is ReactElement<FormFieldProps> =>
+                isValidElement<FormFieldProps>(child) && !!child.props.required
+        )
+        .map((child) => child.props.name);
+
+    const requiredFieldsFilled = requiredFieldNames?.every((name) => formState && formState[name]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
@@ -106,7 +111,7 @@ const Form = ({
     return (
         <FormStyled {...rest} onSubmit={handleSubmit}>
             {formState && onFormChange ? enhanceFields() : children}
-            <Button type="submit" disabled={disabled || isLoading} spinner={isLoading}>
+            <Button type="submit" disabled={disabled || isLoading || !requiredFieldsFilled} spinner={isLoading}>
                 Submit
             </Button>
         </FormStyled>

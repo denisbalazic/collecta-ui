@@ -2,8 +2,9 @@
     "registration":{
         "errors": {
             "required": "This field is required",
-            "tooShort": "Name must have between 2 and 36 characters",
-            "tooLong": "Name must have between 2 and 36 characters",
+            "tooShort": "2 ~ 36 characters long, no special characters",
+            "tooLong":  "2 ~ 36 characters long, no special characters",
+            "noSpecialChars": "2 ~ 36 characters long, no special characters",
             "invalidEmail": "Invalid email",
             "notStrongPassword": "Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol",
             "passwordsDoNotMatch": "Passwords do not match",

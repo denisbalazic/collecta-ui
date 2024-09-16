@@ -10,31 +10,25 @@ import Checkbox from '../../compounds/Checkbox';
 import InfoBox from '../../compounds/InfoBox';
 import {H2} from '../../elements/headers';
 import {Strong} from '../../elements/Strong';
-import {translateErrors} from '../../../utils/utils';
-
-const formatErrorMsg = (msg: string): {message: string} => ({message: i18n.t(`registration.errors.${msg}`)});
+import {translateApiErrorMsgs} from '../../../utils/utils';
 
 const RegisterUserSchema = z
     .object({
         name: z
             .string()
-            .min(1, formatErrorMsg('required'))
-            .min(2, formatErrorMsg('tooShort'))
-            .max(36, formatErrorMsg('tooLong')),
+            .min(2, {message: i18n.t('registration.errors.tooShort')})
+            .max(36, {message: i18n.t('registration.errors.tooLong')})
+            .refine((val) => /^[a-zA-Z0-9 ]+$/.test(val), {message: i18n.t('registration.errors.noSpecialChars')}),
 
-        email: z.string().min(1, formatErrorMsg('required')).email(formatErrorMsg('invalidEmail')),
+        email: z.string().email({message: i18n.t('registration.errors.invalidEmail')}),
 
-        password: z
-            .string()
-            .min(1, formatErrorMsg('required'))
-            .refine(
-                (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(val),
-                formatErrorMsg('notStrongPassword')
-            ),
+        password: z.string().refine((val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(val), {
+            message: i18n.t('registration.errors.notStrongPassword'),
+        }),
 
-        confirmedPassword: z.string().min(1, formatErrorMsg('required')),
+        confirmedPassword: z.string(),
 
-        termsConfirmed: z.boolean().refine((val) => val, formatErrorMsg('mustBeTrue')),
+        termsConfirmed: z.boolean().refine((val) => val, {message: i18n.t('registration.errors.mustBeTrue')}),
     })
     .superRefine((val, ctx) => {
         if (val.password !== val.confirmedPassword) {
@@ -58,7 +52,7 @@ const Register = (): ReactElement => {
     });
 
     const [register, {isSuccess, isLoading, error}] = useRegisterMutation();
-    const translatedErrors = translateErrors(error, 'registration.errors');
+    const translatedErrors = translateApiErrorMsgs(error, 'registration.errors');
 
     return (
         <CenteredContainer>
@@ -81,9 +75,9 @@ const Register = (): ReactElement => {
                         isLoading={isLoading}
                         data-testid="register-form"
                     >
-                        <Field name="name" label="Name" placeholder="name" />
-                        <Field name="email" label="Email" placeholder="email" />
-                        <Field name="password" label="Password" placeholder="password" />
+                        <Field name="name" label="Name" placeholder="name" required />
+                        <Field name="email" label="Email" placeholder="email" required />
+                        <Field name="password" label="Password" placeholder="password" required />
                         <Field name="confirmedPassword" label="Repeat password" placeholder="repeat password" />
                         <Checkbox
                             name="termsConfirmed"
