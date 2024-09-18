@@ -13,6 +13,7 @@ const Checkbox = ({name, label, value, onChange, errorMsg}: CheckboxProps): Reac
         <CheckboxStyled $hasError={hasError}>
             <CheckboxInputStyled
                 id={name}
+                name={name}
                 type="checkbox"
                 checked={value}
                 onChange={(e) => onChange && onChange(name, e.target.checked)}

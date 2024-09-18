@@ -1,5 +1,5 @@
 import React, {ReactElement} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import {HeaderBoxStyled, HeaderContainerStyled, HeaderLeftBoxStyled} from './Header.style';
 import {useLogoutMutation} from '../../store/api/auth.api';
 import Button from '../elements/Button';
@@ -13,6 +13,8 @@ const Header = (): ReactElement => {
     const [logout] = useLogoutMutation();
     const {loggedIn} = useAuth();
     const {isCollectionMode, collection} = useCollection();
+
+    const {pathname} = useLocation();
 
     const [search, setSearch] = React.useState<string>('');
 
@@ -47,13 +49,17 @@ const Header = (): ReactElement => {
                     <>
                         <IconButton secondary icon="ph:question" to="/about" />
 
-                        <Button secondary transparent to="/register">
-                            Register
-                        </Button>
+                        {pathname !== '/register' && (
+                            <Button secondary transparent to="/register">
+                                Register
+                            </Button>
+                        )}
 
-                        <Button secondary transparent to="/login">
-                            Login
-                        </Button>
+                        {pathname !== '/login' && (
+                            <Button secondary transparent to="/login">
+                                Login
+                            </Button>
+                        )}
                     </>
                 ) : (
                     <>

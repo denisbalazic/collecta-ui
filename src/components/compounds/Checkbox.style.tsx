@@ -13,7 +13,7 @@ export const CheckboxStyled = styled.div<CheckboxStyledProps>`
 
 export const CheckboxLabelStyled = styled.label<CheckboxStyledProps>`
     margin-left: 10px;
-    //color: ${(props) => props.theme.color.basic};
+    color: ${(props) => props.theme.color.basic};
     font-size: 1rem;
     cursor: pointer;
 `;
@@ -22,7 +22,7 @@ export const CheckboxInputStyled = styled.input<CheckboxStyledProps>`
     padding: 3px 5px;
     border: 1px solid ${(props) => props.theme.color.basic};
     border-radius: 6px;
-    //color: ${(props) => props.theme.color.basic};
+    color: ${(props) => props.theme.color.basic};
     font-size: 1.4em;
     cursor: pointer;
 `;

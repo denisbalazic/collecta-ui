@@ -26,6 +26,8 @@ export const InputStyled = styled.input<FieldStyledProps>`
 
     &::placeholder {
         color: #bababa;
+        font-size: 0.75em;
+        font-style: italic;
     }
 
     &:focus {

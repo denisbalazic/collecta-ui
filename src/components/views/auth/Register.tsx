@@ -18,7 +18,7 @@ const RegisterUserSchema = z
             .string()
             .min(2, {message: i18n.t('registration.errors.tooShort')})
             .max(36, {message: i18n.t('registration.errors.tooLong')})
-            .refine((val) => /^[a-zA-Z0-9 ]+$/.test(val), {message: i18n.t('registration.errors.noSpecialChars')}),
+            .refine((val) => /^[a-zA-Z0-9. ]+$/.test(val), {message: i18n.t('registration.errors.noSpecialChars')}),
 
         email: z.string().email({message: i18n.t('registration.errors.invalidEmail')}),
 
@@ -60,7 +60,6 @@ const Register = (): ReactElement => {
                 title="Register"
                 subtitle={
                     <>
-                        <p>...to access all features we have to offer ;)</p>
                         Already have an account? <Link to="/login">Login</Link>
                     </>
                 }
@@ -75,10 +74,10 @@ const Register = (): ReactElement => {
                         isLoading={isLoading}
                         data-testid="register-form"
                     >
-                        <Field name="name" label="Name" placeholder="name" required />
-                        <Field name="email" label="Email" placeholder="email" required />
-                        <Field name="password" label="Password" placeholder="password" required />
-                        <Field name="confirmedPassword" label="Repeat password" placeholder="repeat password" />
+                        <Field name="name" label="Name" required />
+                        <Field name="email" label="Email" required />
+                        <Field name="password" label="Password" required />
+                        <Field name="confirmedPassword" label="Repeat password" required />
                         <Checkbox
                             name="termsConfirmed"
                             label={

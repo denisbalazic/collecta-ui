@@ -1,5 +1,5 @@
 import React, {Children, isValidElement, PropsWithChildren, ReactElement, useState} from 'react';
-import {ZodError, ZodSchema} from 'zod';
+import {ZodSchema} from 'zod';
 import Button from '../elements/Button';
 import {FormStyled} from './Form.style';
 import Field from './Field';
@@ -10,6 +10,7 @@ export interface FormFieldProps<T extends string | number | boolean = string | n
     name: string;
     value?: T;
     onChange?: (name: string, value: T) => void;
+    placeholder?: string;
     errorMsg?: string[];
     disabled?: boolean;
     required?: boolean;
@@ -82,6 +83,7 @@ const Form = ({
                         validationErrors[child.props.name] ||
                         (error && error[child.props.name]),
                     disabled: child.props.disabled || disabled || isLoading,
+                    placeholder: child.props.placeholder || (child.props.required ? '*required' : ''),
                 });
             }
             return child as ReactElement;
