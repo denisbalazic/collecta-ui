@@ -12,7 +12,7 @@ export const translateApiErrorMsgs = (
         ? Object.fromEntries(
               Object.entries(errorObj).map(([key, value]) => [
                   key,
-                  value.map((errorMsg) => i18n.t(`${prefix}.${errorMsg}`)),
+                  value?.map((errorMsg) => i18n.t(`${prefix}.${errorMsg}`)),
               ])
           )
         : {};
@@ -24,4 +24,22 @@ export const mapZodToValidationErrors = (zodError: ZodError): Record<string, str
         errors[e.path[0]] = [...(errors[e.path[0]] || []), e.message];
     });
     return errors;
+};
+
+export const trimStringProperties = (
+    obj: Record<string, string | number | boolean> | undefined
+): Record<string, any> | undefined => {
+    if (!obj) return obj;
+
+    return Object.keys(obj).reduce((acc, key) => {
+        const value = obj[key];
+        if (typeof value === 'string') {
+            acc[key] = value.trim(); // Trim string values
+        } else if (typeof value === 'object' && value !== null) {
+            acc[key] = trimStringProperties(value); // Recursively trim for nested objects
+        } else {
+            acc[key] = value; // Keep non-string values unchanged
+        }
+        return acc;
+    }, {} as Record<string, any>);
 };

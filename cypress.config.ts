@@ -1,10 +1,15 @@
-import { defineConfig } from "cypress";
+import {defineConfig} from 'cypress';
+import * as dotenv from 'dotenv';
+import pluginFunction from './cypress/plugins';
+
+dotenv.config();
 
 export default defineConfig({
-  e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
+    e2e: {
+        setupNodeEvents(on, config) {
+            pluginFunction(on);
+            return config;
+        },
+        baseUrl: process.env.BASE_URL,
     },
-    baseUrl: "http://localhost:3001",
-  },
 });

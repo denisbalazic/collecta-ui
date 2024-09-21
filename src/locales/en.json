@@ -4,7 +4,7 @@
             "required": "This field is required",
             "tooShort": "2 ~ 36 characters long, no special characters",
             "tooLong":  "2 ~ 36 characters long, no special characters",
-            "noSpecialChars": "2 ~ 36 characters long, no special characters",
+            "noSpecialChars": "2 ~ 36 long, no special characters, only . and _ allowed",
             "invalidEmail": "Invalid email",
             "notStrongPassword": "Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol",
             "passwordsDoNotMatch": "Passwords do not match",

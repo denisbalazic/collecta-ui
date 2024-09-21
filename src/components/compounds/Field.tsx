@@ -5,9 +5,10 @@ import {FormFieldProps} from './Form';
 interface FieldProps extends FormFieldProps<string | number> {
     label?: string;
     placeholder?: string;
+    testId?: string;
 }
 
-const Field = ({label, name, placeholder, value, onChange, errorMsg}: FieldProps): ReactElement => {
+const Field = ({label, name, placeholder, value, onChange, errorMsg, testId}: FieldProps): ReactElement => {
     const hasError = errorMsg && errorMsg.length > 0;
 
     return (
@@ -25,8 +26,11 @@ const Field = ({label, name, placeholder, value, onChange, errorMsg}: FieldProps
                 placeholder={placeholder}
                 onChange={(e) => onChange && onChange(name, e.target.value)}
                 $hasError={hasError}
+                data-test={testId}
             />
-            <FieldMessageStyled $hasError={hasError}>{errorMsg?.join(', ')}</FieldMessageStyled>
+            <FieldMessageStyled $hasError={hasError} data-test={`${testId}${hasError ? '--error' : '--noError'}`}>
+                {errorMsg?.join(', ')}
+            </FieldMessageStyled>
         </FieldStyled>
     );
 };

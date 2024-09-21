@@ -1,7 +1,8 @@
-import React, {ReactElement, useState} from 'react';
+import React, {ReactElement, useMemo, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {z} from 'zod';
 import i18n from 'i18next';
+import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
 import CenteredContainer from '../../elements/CenteredContainer';
@@ -18,7 +19,7 @@ const RegisterUserSchema = z
             .string()
             .min(2, {message: i18n.t('registration.errors.tooShort')})
             .max(36, {message: i18n.t('registration.errors.tooLong')})
-            .refine((val) => /^[a-zA-Z0-9. ]+$/.test(val), {message: i18n.t('registration.errors.noSpecialChars')}),
+            .refine((val) => /^[a-zA-Z0-9._ ]+$/.test(val), {message: i18n.t('registration.errors.noSpecialChars')}),
 
         email: z.string().email({message: i18n.t('registration.errors.invalidEmail')}),
 
@@ -52,7 +53,13 @@ const Register = (): ReactElement => {
     });
 
     const [register, {isSuccess, isLoading, error}] = useRegisterMutation();
-    const translatedErrors = translateApiErrorMsgs(error, 'registration.errors');
+    const translatedErrors = useMemo(
+        () =>
+            (error as FetchBaseQueryError)?.status === 400
+                ? translateApiErrorMsgs(error, 'registration.errors')
+                : undefined,
+        [error]
+    );
 
     return (
         <CenteredContainer>
@@ -72,12 +79,17 @@ const Register = (): ReactElement => {
                         validationSchema={RegisterUserSchema}
                         error={translatedErrors}
                         isLoading={isLoading}
-                        data-testid="register-form"
+                        testId="register-form"
                     >
-                        <Field name="name" label="Name" required />
-                        <Field name="email" label="Email" required />
-                        <Field name="password" label="Password" required />
-                        <Field name="confirmedPassword" label="Repeat password" required />
+                        <Field name="name" label="Name" required testId="register-name" />
+                        <Field name="email" label="Email" required testId="register-email" />
+                        <Field name="password" label="Password" required testId="register-password" />
+                        <Field
+                            name="confirmedPassword"
+                            label="Repeat password"
+                            required
+                            testId="register-confirmedPassword"
+                        />
                         <Checkbox
                             name="termsConfirmed"
                             label={
@@ -92,10 +104,11 @@ const Register = (): ReactElement => {
                                     </a>
                                 </>
                             }
+                            testId="register-termsConfirmed"
                         />
                     </Form>
                 ) : (
-                    <H2 data-testid="register-success">
+                    <H2 data-test="register-successMsg">
                         Thank you for signing up! We&apos;ve sent an email to <Strong>{registerUser.email}</Strong>.
                         Please click the link in the email to complete registration. Link will be valid for 1 hour.
                     </H2>

@@ -36,12 +36,8 @@
 //   }
 // }
 
-Cypress.Commands.add('resetDB', () => {
-    cy.request('POST', 'http://localhost:3000/testDb/reset');
-});
-
-Cypress.Commands.add('seedDB', (seedData) => {
-    cy.request('POST', 'http://localhost:3000/testDb/populate', seedData);
+Cypress.Commands.add('getByTestId', (id) => {
+    cy.get(`[data-test=${id}]`);
 });
 
 export {};

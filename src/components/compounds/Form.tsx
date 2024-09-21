@@ -4,7 +4,7 @@ import Button from '../elements/Button';
 import {FormStyled} from './Form.style';
 import Field from './Field';
 import Checkbox from './Checkbox';
-import {mapZodToValidationErrors} from '../../utils/utils';
+import {mapZodToValidationErrors, trimStringProperties} from '../../utils/utils';
 
 export interface FormFieldProps<T extends string | number | boolean = string | number | boolean> {
     name: string;
@@ -26,6 +26,7 @@ interface FormProps {
     onSubmit: () => void;
     disabled?: boolean;
     isLoading?: boolean;
+    testId?: string;
 }
 
 /**
@@ -56,7 +57,7 @@ const Form = ({
     disabled,
     isLoading,
     children,
-    ...rest
+    testId,
 }: PropsWithChildren<FormProps>): ReactElement => {
     const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
 
@@ -100,8 +101,12 @@ const Form = ({
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
+
+        const trimmedFormState = trimStringProperties(formState);
+        onFormChange(trimmedFormState);
+
         if (validationSchema) {
-            const result = validationSchema.safeParse(formState);
+            const result = validationSchema.safeParse(trimmedFormState);
             if (!result.success) {
                 setValidationErrors(mapZodToValidationErrors(result.error));
                 return;
@@ -111,9 +116,14 @@ const Form = ({
     };
 
     return (
-        <FormStyled {...rest} onSubmit={handleSubmit}>
+        <FormStyled onSubmit={handleSubmit} data-test={testId}>
             {formState && onFormChange ? enhanceFields() : children}
-            <Button type="submit" disabled={disabled || isLoading || !requiredFieldsFilled} spinner={isLoading}>
+            <Button
+                type="submit"
+                disabled={disabled || isLoading || !requiredFieldsFilled}
+                spinner={isLoading}
+                data-test="form-submit"
+            >
                 Submit
             </Button>
         </FormStyled>

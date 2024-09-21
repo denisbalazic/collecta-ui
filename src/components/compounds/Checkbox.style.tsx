@@ -5,10 +5,12 @@ interface CheckboxStyledProps {
 }
 
 export const CheckboxStyled = styled.div<CheckboxStyledProps>`
-    display: flex;
-    margin: 10px 0;
-    color: ${(props) => (props.$hasError ? props.theme.color.error : props.theme.color.basic)};
-    cursor: pointer;
+    .div {
+        display: flex;
+        margin: 10px 0;
+        color: ${(props) => (props.$hasError ? props.theme.color.error : props.theme.color.basic)};
+        cursor: pointer;
+    }
 `;
 
 export const CheckboxLabelStyled = styled.label<CheckboxStyledProps>`
