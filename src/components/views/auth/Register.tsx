@@ -61,6 +61,9 @@ const Register = (): ReactElement => {
         [error]
     );
 
+    console.log('error', error);
+    console.log('translatedErrors', translatedErrors);
+
     return (
         <CenteredContainer>
             <InfoBox
@@ -76,7 +79,7 @@ const Register = (): ReactElement => {
                         onSubmit={() => register(registerUser)}
                         formState={registerUser}
                         onFormChange={setRegisterUser}
-                        validationSchema={RegisterUserSchema}
+                        // validationSchema={RegisterUserSchema}
                         error={translatedErrors}
                         isLoading={isLoading}
                         testId="register-form"

@@ -1,15 +1,16 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {ICollection} from '../../types/ICollection';
-import {IPagination, WithoutId} from '../../types/IResponse';
+import {WithoutId} from '../../types/utils';
 import {setRedirectAction} from '../common.reducer';
 import {baseQueryWithReauth, provideListTags, provideTag, provideTagById} from '../utils';
+import {IPagination} from '../../types/pageable';
 
 export const collectionApi = createApi({
     reducerPath: 'collectionApi',
     baseQuery: baseQueryWithReauth,
     tagTypes: ['Collection'],
     endpoints: (builder) => ({
-        fetchCollections: builder.query<{data: ICollection[]; pagination: IPagination}, void>({
+        fetchCollections: builder.query<{content: ICollection[]; pagination: IPagination}, void>({
             query: () => 'collections',
             providesTags: provideListTags('Collection'),
         }),

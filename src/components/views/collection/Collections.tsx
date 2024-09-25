@@ -1,11 +1,11 @@
 import React, {ReactElement} from 'react';
 import {Link} from 'react-router-dom';
 import {useFetchCollectionsQuery} from '../../../store/api/collection.api';
-import {IPagination} from '../../../types/IResponse';
+import {IPagination} from '../../../types/pageable';
 
 const Collections = (): ReactElement => {
     const {data, error, isLoading} = useFetchCollectionsQuery();
-    const {pagination, data: collections} = data || {};
+    const {pagination, content: collections} = data || {};
 
     if (isLoading) {
         return <div>Loading...</div>;

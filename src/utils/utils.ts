@@ -2,20 +2,29 @@ import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 import {SerializedError} from '@reduxjs/toolkit';
 import {ZodError} from 'zod';
 import i18n from './i18n';
+import {IResponseError} from '../types/error';
 
 export const translateApiErrorMsgs = (
     error: FetchBaseQueryError | SerializedError | undefined,
     prefix: string
 ): Record<string, string[]> => {
-    const errorObj = (error as FetchBaseQueryError)?.data as Record<string, string[]>;
-    return errorObj
-        ? Object.fromEntries(
-              Object.entries(errorObj).map(([key, value]) => [
-                  key,
-                  value?.map((errorMsg) => i18n.t(`${prefix}.${errorMsg}`)),
-              ])
-          )
-        : {};
+    const apiError = (error as FetchBaseQueryError)?.data as IResponseError | undefined;
+
+    if (!apiError || !apiError.details?.length) return {};
+
+    const errorObj: Record<string, string[]> = {};
+
+    apiError.details.forEach((validationError) => {
+        const {property, constraints} = validationError;
+
+        if (constraints) {
+            errorObj[property] = Object.values(constraints).map((constraintMsg) =>
+                i18n.t(`${prefix}.${constraintMsg}`)
+            );
+        }
+    });
+
+    return errorObj;
 };
 
 export const mapZodToValidationErrors = (zodError: ZodError): Record<string, string[]> => {

@@ -3,7 +3,7 @@ import {removeLocalTokens, setLocalTokens} from '../../service/auth.service';
 import {IAuthCredentials, IRegisterUser, IResetPasswordDto, ITokenResponse} from '../../types/IUser';
 import {setRedirectAction} from '../common.reducer';
 import {fetchUserAction} from './user.api';
-import {setLoggedIn, setRegistered, setVerified} from '../auth.reducer';
+import {setLoggedIn, setVerified} from '../auth.reducer';
 import {baseQueryWithReauth} from '../utils';
 
 export const authApi = createApi({

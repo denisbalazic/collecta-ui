@@ -3,10 +3,11 @@ import {Mutex} from 'async-mutex';
 import {BaseQueryApi} from '@reduxjs/toolkit/query';
 import {API_HOST} from '../config';
 import {getLocalAccessToken, getLocalRefreshToken, removeLocalTokens, setLocalTokens} from '../service/auth.service';
-import {IPageableResponse} from '../types/IResponse';
 import {ITokenResponse} from '../types/IUser';
 import {setLoggedIn} from './auth.reducer';
 import {setRedirectAction} from './common.reducer';
+import {IResponse, ResponseStatus} from '../types/response';
+import {IPageable} from '../types/pageable';
 
 const fetchBaseQueryOptions = {
     baseUrl: API_HOST,
@@ -23,6 +24,21 @@ export const baseQuery = fetchBaseQuery({
             headers.set('Access-Control-Allow-Origin', '*');
         }
         return headers;
+    },
+    responseHandler: async (response) => {
+        const result: IResponse = await response.json();
+
+        // Check if the response matches the envelope pattern (IResponse)
+        if (result && typeof result === 'object') {
+            if (result.status === ResponseStatus.SUCCESS && 'data' in result) {
+                return result.data;
+            }
+            if (result.status === ResponseStatus.ERROR && 'error' in result) {
+                return result.error;
+            }
+        }
+
+        return result;
     },
 });
 
@@ -80,10 +96,10 @@ export const baseQueryWithReauth: typeof baseQuery = async (args, api, extraOpti
 export const provideListTags =
     <T extends string>(tag: T) =>
     // returns a function that accepts both paginated and non-paginated results
-    <R extends {_id: string}>(results?: R[] | IPageableResponse<R>): TagDescription<T>[] => {
+    <R extends {_id: string}>(results?: R[] | IPageable<R>): TagDescription<T>[] => {
         if (results && 'pagination' in results) {
-            return results.data
-                ? [...results.data.map((item) => ({type: tag, id: item._id})), {type: tag, id: 'LIST'}]
+            return results.content
+                ? [...results.content.map((item) => ({type: tag, id: item._id})), {type: tag, id: 'LIST'}]
                 : [{type: tag, id: 'LIST'}];
         }
         return results
