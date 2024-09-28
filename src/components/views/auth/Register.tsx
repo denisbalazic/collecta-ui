@@ -6,12 +6,14 @@ import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 import Form from '../../compounds/Form';
 import Field from '../../compounds/Field';
 import CenteredContainer from '../../elements/CenteredContainer';
-import {useRegisterMutation} from '../../../store/api/auth.api';
+import {useRegisterMutation, useResendVerificationEmailMutation} from '../../../store/api/auth.api';
 import Checkbox from '../../compounds/Checkbox';
 import InfoBox from '../../compounds/InfoBox';
 import {H2} from '../../elements/headers';
 import {Strong} from '../../elements/Strong';
-import {translateApiErrorMsgs} from '../../../utils/utils';
+import {mapApiToValidationErrors} from '../../../utils/utils';
+import {ErrorCodes, IResponseError} from '../../../types/error';
+import Button from '../../elements/Button';
 
 const RegisterUserSchema = z
     .object({
@@ -41,7 +43,7 @@ const RegisterUserSchema = z
         }
     });
 
-type RegisterUserDto = z.infer<typeof RegisterUserSchema>;
+export type RegisterUserDto = z.infer<typeof RegisterUserSchema>;
 
 const Register = (): ReactElement => {
     const [registerUser, setRegisterUser] = useState<RegisterUserDto>({
@@ -53,16 +55,12 @@ const Register = (): ReactElement => {
     });
 
     const [register, {isSuccess, isLoading, error}] = useRegisterMutation();
-    const translatedErrors = useMemo(
-        () =>
-            (error as FetchBaseQueryError)?.status === 400
-                ? translateApiErrorMsgs(error, 'registration.errors')
-                : undefined,
-        [error]
-    );
+    const apiError = (error as FetchBaseQueryError)?.data as IResponseError | undefined;
+    const validationErrors = useMemo(() => mapApiToValidationErrors(apiError, 'registration.errors'), [apiError]);
+    const userExistsError = apiError?.code === ErrorCodes.USER_EXISTS;
+    const userIsNotVerifiedError = apiError?.code === ErrorCodes.USER_NOT_VERIFIED;
 
-    console.log('error', error);
-    console.log('translatedErrors', translatedErrors);
+    const [resendVerification] = useResendVerificationEmailMutation();
 
     return (
         <CenteredContainer>
@@ -74,13 +72,13 @@ const Register = (): ReactElement => {
                     </>
                 }
             >
-                {!isSuccess ? (
+                {!isSuccess && !userExistsError && !userIsNotVerifiedError && (
                     <Form
                         onSubmit={() => register(registerUser)}
                         formState={registerUser}
                         onFormChange={setRegisterUser}
-                        // validationSchema={RegisterUserSchema}
-                        error={translatedErrors}
+                        validationSchema={RegisterUserSchema}
+                        error={validationErrors}
                         isLoading={isLoading}
                         testId="register-form"
                     >
@@ -110,10 +108,59 @@ const Register = (): ReactElement => {
                             testId="register-termsConfirmed"
                         />
                     </Form>
-                ) : (
+                )}
+
+                {isSuccess && (
                     <H2 data-test="register-successMsg">
-                        Thank you for signing up! We&apos;ve sent an email to <Strong>{registerUser.email}</Strong>.
-                        Please click the link in the email to complete registration. Link will be valid for 1 hour.
+                        <p>
+                            Thank you for signing up! We&apos;ve sent an email to <Strong>{registerUser.email}</Strong>.
+                        </p>
+                        <p>
+                            Please click the link in the email to complete registration. Link will be valid for 1 hour.
+                        </p>
+                        <p>If you didn&apos;t receive the email, you can resend it.</p>
+                        <Button
+                            onClick={() => resendVerification(registerUser.email)}
+                            size="md"
+                            transparent
+                            data-test="resend-verification-email"
+                        >
+                            Resend email
+                        </Button>
+                    </H2>
+                )}
+
+                {userExistsError && (
+                    <H2 data-test="register-userExistsError">
+                        <p>
+                            You are already registered with email <Strong>{registerUser.email}</Strong>.{' '}
+                            <Link to="/login">Login here</Link>.
+                        </p>
+                        <p>
+                            If you forgot your password, you can{' '}
+                            <Link to="/forgot-password" state={{email: registerUser.email}}>
+                                reset it here
+                            </Link>
+                            .
+                        </p>
+                    </H2>
+                )}
+
+                {userIsNotVerifiedError && (
+                    <H2 data-test="register-userIsNotVerifiedError">
+                        <p>
+                            User with email <Strong>{registerUser.email}</Strong> is already registered, but is not
+                            verified. Please check your email for verification link.
+                        </p>
+                        <p>If you didn&apos;t receive the email, you can resend it.</p>
+                        <Button
+                            onClick={() => resendVerification(registerUser.email)}
+                            size="md"
+                            transparent
+                            data-test="resend-verification-email"
+                        >
+                            Resend email
+                        </Button>
                     </H2>
                 )}
             </InfoBox>

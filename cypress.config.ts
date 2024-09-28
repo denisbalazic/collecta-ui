@@ -6,8 +6,8 @@ dotenv.config();
 
 export default defineConfig({
     e2e: {
-        setupNodeEvents(on, config) {
-            pluginFunction(on);
+        setupNodeEvents: async (on, config) => {
+            await pluginFunction(on);
             return config;
         },
         baseUrl: process.env.BASE_URL,

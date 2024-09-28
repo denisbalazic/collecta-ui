@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
+import {useLocation} from 'react-router-dom';
 import CenteredContainer from '../../elements/CenteredContainer';
 import Form from '../../compounds/Form';
 import {H2} from '../../elements/headers';
@@ -9,12 +10,18 @@ import {Strong} from '../../elements/Strong';
 import InfoBox from '../../compounds/InfoBox';
 
 const ForgotPassword = () => {
-    const [email, setEmail] = useState('');
+    const location = useLocation();
+    const incomingEmail = location.state?.email;
+    const [email, setEmail] = useState(incomingEmail || '');
+
+    useEffect(() => {
+        setEmail(incomingEmail || '');
+    }, [incomingEmail]);
 
     const [sendPasswordResetRequest, {isSuccess, isLoading, error}] = useForgotPasswordMutation();
     const notFound = (error as FetchBaseQueryError)?.status === 404;
-    const notVerifyed = (error as FetchBaseQueryError)?.status === 401;
-    const errorMsg = notFound ? ['User with this email does not exist'] : notVerifyed ? ['User is not verified'] : [];
+    const notVerified = (error as FetchBaseQueryError)?.status === 401;
+    const errorMsg = notFound ? ['User with this email does not exist'] : notVerified ? ['User is not verified'] : [];
 
     return (
         <CenteredContainer>

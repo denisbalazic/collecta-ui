@@ -7,13 +7,6 @@ export interface IUser {
     __v?: number;
 }
 
-export interface IRegisterUser {
-    email: string;
-    name: string;
-    password: string;
-    confirmedPassword: string;
-}
-
 export interface IAuthCredentials {
     email: string;
     password: string;

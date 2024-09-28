@@ -2,19 +2,17 @@ import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 import {SerializedError} from '@reduxjs/toolkit';
 import {ZodError} from 'zod';
 import i18n from './i18n';
-import {IResponseError} from '../types/error';
+import {ErrorCodes, IResponseError} from '../types/error';
 
-export const translateApiErrorMsgs = (
-    error: FetchBaseQueryError | SerializedError | undefined,
+export const mapApiToValidationErrors = (
+    error: IResponseError | undefined,
     prefix: string
 ): Record<string, string[]> => {
-    const apiError = (error as FetchBaseQueryError)?.data as IResponseError | undefined;
-
-    if (!apiError || !apiError.details?.length) return {};
+    if (!error || error.code !== ErrorCodes.VALIDATION_FAILED || !error.details?.length) return {};
 
     const errorObj: Record<string, string[]> = {};
 
-    apiError.details.forEach((validationError) => {
+    error.details.forEach((validationError) => {
         const {property, constraints} = validationError;
 
         if (constraints) {

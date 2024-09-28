@@ -1,16 +1,17 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {removeLocalTokens, setLocalTokens} from '../../service/auth.service';
-import {IAuthCredentials, IRegisterUser, IResetPasswordDto, ITokenResponse} from '../../types/IUser';
+import {IAuthCredentials, IResetPasswordDto, ITokenResponse} from '../../types/IUser';
 import {setRedirectAction} from '../common.reducer';
 import {fetchUserAction} from './user.api';
 import {setLoggedIn, setVerified} from '../auth.reducer';
 import {baseQueryWithReauth} from '../utils';
+import {RegisterUserDto} from '../../components/views/auth/Register';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
-        register: builder.mutation<ITokenResponse, IRegisterUser>({
+        register: builder.mutation<ITokenResponse, RegisterUserDto>({
             query: (registerUser) => ({
                 url: '/auth/register',
                 method: 'POST',
@@ -86,6 +87,13 @@ export const authApi = createApi({
                 }
             },
         }),
+        resendVerificationEmail: builder.mutation<void, string>({
+            query: (email) => ({
+                url: '/auth/resend-verification-email',
+                method: 'POST',
+                body: {email},
+            }),
+        }),
         forgotPassword: builder.mutation<void, string>({
             query: (email) => ({
                 url: '/auth/forgot-password',
@@ -116,6 +124,7 @@ export const {
     useLoginMutation,
     useLogoutMutation,
     useVerifyEmailMutation,
+    useResendVerificationEmailMutation,
     useForgotPasswordMutation,
     useResetPasswordMutation,
 } = authApi;

@@ -47,6 +47,7 @@ interface FormProps {
  * @param {() => void} onSubmit - The submit handler.
  * @param {boolean} [disabled] - The disabled state of the form.
  * @param {boolean} [isLoading] - The loading state of the form, spinner will be shown on submit button.
+ * @param {string} [testId] - Id used for testing (ex. cypress).
  */
 const Form = ({
     formState,
@@ -56,8 +57,8 @@ const Form = ({
     onSubmit,
     disabled,
     isLoading,
-    children,
     testId,
+    children,
 }: PropsWithChildren<FormProps>): ReactElement => {
     const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
 

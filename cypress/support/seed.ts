@@ -21,7 +21,33 @@ export const unverifiedUser = {
     termsConfirmed: unverifiedUserDto.termsConfirmed,
     password: '$2b$08$K0JwhaRC0Y76Trh6l3qPH.3LSXH2uUMEhTWx3kM29iCc8pZXyKKmy',
     isVerified: false,
-    verificationToken: '$2b$08$/cyfe8oTwvK0rT7jvUU.8OJksoK14Z3veva1E3DJuQsyBneP/N0u2',
+    verificationToken: '$2b$08$E4NA/s8Eqkw9oqQIAMFaFe3XRn8b8vkffOAV5NFKOTByMieNY5KWm',
+    tokenExpiration: new Date(Date.now() + 60 * 60 * 1000),
+    failedLoginAttempts: [],
+};
+
+export const unverifiedUserCredentials = {
+    email: unverifiedUserDto.email,
+    password: unverifiedUserDto.password,
+};
+
+export const unverifiedUserWithExpiredTokenDto = {
+    name: 'Jess Unverified Expired',
+    email: 'jess.unverified.expired@test.eu',
+    password: 'Password1!',
+    confirmedPassword: 'Password1!',
+    termsConfirmed: true,
+};
+
+export const unverifiedUserWithExpiredToken = {
+    _id: '620df4ef18b174c4ba6bb998',
+    name: unverifiedUserWithExpiredTokenDto.name,
+    email: unverifiedUserWithExpiredTokenDto.email,
+    termsConfirmed: unverifiedUserDto.termsConfirmed,
+    password: '$2b$08$K0JwhaRC0Y76Trh6l3qPH.3LSXH2uUMEhTWx3kM29iCc8pZXyKKmy',
+    isVerified: false,
+    verificationToken: '$2b$08$E4NA/s8Eqkw9oqQIAMFaFe3XRn8b8vkffOAV5NFKOTByMieNY5KWm',
+    tokenExpiration: new Date('2022-07-19T00:00:00.000Z'),
     failedLoginAttempts: [],
 };
 
@@ -40,13 +66,19 @@ export const verifiedUser = {
     termsConfirmed: verifiedUserDto.termsConfirmed,
     password: '$2b$08$S/Syd/ys8AkAevcMUgF.G.mKFNKAJfz.8Cy6n67zw.7OmvRCgT1Sa',
     isVerified: true,
-    verificationToken: '',
+    verificationToken: undefined,
+    tokenExpiration: undefined,
     failedLoginAttempts: [],
 };
 
-export const expiredToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implc3NAdGVzdC5ldSIsInR5cGUiOiJWRVJJRlkiLCJpYXQiOjE3MjYzMDcwMTQsImV4cCI6MTcyNjMxMDYxNH0.g1TjvfqBkXWhX3A_kmrNcPXmkmyMIWIQDPaLDmh7f4I';
+export const verifiedUserCredentials = {
+    email: verifiedUserDto.email,
+    password: verifiedUserDto.password,
+};
 
 export const seed = {
-    users: [unverifiedUser, verifiedUser],
+    users: [verifiedUser, unverifiedUser, unverifiedUserWithExpiredToken],
 } as Record<string, any[]>;
+
+export const expiredToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implc3NAdGVzdC5ldSIsInR5cGUiOiJWRVJJRlkiLCJpYXQiOjE3MjYzMDcwMTQsImV4cCI6MTcyNjMxMDYxNH0.g1TjvfqBkXWhX3A_kmrNcPXmkmyMIWIQDPaLDmh7f4I';
