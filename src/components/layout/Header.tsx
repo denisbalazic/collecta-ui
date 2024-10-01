@@ -49,17 +49,19 @@ const Header = (): ReactElement => {
                     <>
                         <IconButton secondary icon="ph:question" to="/about" />
 
-                        {pathname !== '/register' && (
-                            <Button secondary transparent to="/register">
-                                Register
-                            </Button>
-                        )}
+                        <Button secondary transparent to="/register" disabled={pathname === '/register'}>
+                            Register
+                        </Button>
 
-                        {pathname !== '/login' && (
-                            <Button secondary transparent to="/login">
-                                Login
-                            </Button>
-                        )}
+                        <Button
+                            secondary
+                            transparent
+                            to="/login"
+                            disabled={pathname === '/login'}
+                            data-test="login-button"
+                        >
+                            Login
+                        </Button>
                     </>
                 ) : (
                     <>
@@ -67,7 +69,7 @@ const Header = (): ReactElement => {
 
                         <IconButton secondary icon="ph:question" to="/about" />
 
-                        <IconButton secondary icon="fe:logout" onClick={handleLogout} />
+                        <IconButton secondary icon="fe:logout" onClick={handleLogout} data-test="logout-button" />
                     </>
                 )}
             </HeaderBoxStyled>

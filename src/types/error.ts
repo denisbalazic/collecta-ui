@@ -21,8 +21,14 @@ export type IResponseErrorRest = Omit<IResponseError, keyof IResponseErrorBase>;
 export enum ErrorCodes {
     BAD_REQUEST = 'BAD_REQUEST',
     VALIDATION_FAILED = 'VALIDATION_FAILED',
+
     USER_EXISTS = 'USER_EXISTS',
     USER_NOT_VERIFIED = 'USER_NOT_VERIFIED',
+
+    UNAUTHORIZED = 'UNAUTHORIZED',
+    FORBIDDEN = 'FORBIDDEN',
+    LOGIN_LIMIT_EXCEEDED = 'LOGIN_LIMIT_EXCEEDED',
+
     SERVER_ERROR = 'SERVER_ERROR',
 }
 

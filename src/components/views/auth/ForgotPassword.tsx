@@ -27,7 +27,11 @@ const ForgotPassword = () => {
         <CenteredContainer>
             <InfoBox title="Reset password">
                 {!isSuccess ? (
-                    <Form onSubmit={() => sendPasswordResetRequest(email)} isLoading={isLoading}>
+                    <Form
+                        onSubmit={() => sendPasswordResetRequest(email)}
+                        isLoading={isLoading}
+                        testId="forgot-password-form"
+                    >
                         <Field
                             label="Email"
                             name="email"
@@ -35,10 +39,11 @@ const ForgotPassword = () => {
                             value={email}
                             onChange={(_, v) => setEmail(v as string)}
                             errorMsg={errorMsg}
+                            testId="forgot-password-email"
                         />
                     </Form>
                 ) : (
-                    <H2>
+                    <H2 data-test="forgot-password-successMsg">
                         We&apos;ve sent an email to <Strong>{email}</Strong>. Please click the link in the email to
                         complete password reset. Link will be valid for 1 hour.
                     </H2>

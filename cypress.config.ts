@@ -12,4 +12,7 @@ export default defineConfig({
         },
         baseUrl: process.env.BASE_URL,
     },
+    env: {
+        baseUrl: process.env.BASE_URL,
+    },
 });

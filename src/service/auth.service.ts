@@ -1,7 +1,7 @@
 import {ITokenResponse} from '../types/IUser';
 
-const ACCESS_TOKEN = 'access_token';
-const REFRESH_TOKEN = 'refresh_token';
+export const ACCESS_TOKEN = 'access_token';
+export const REFRESH_TOKEN = 'refresh_token';
 
 export function getLocalRefreshToken(): string {
     return localStorage.getItem(REFRESH_TOKEN) || '';

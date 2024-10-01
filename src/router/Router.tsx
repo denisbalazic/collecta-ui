@@ -22,11 +22,7 @@ const Router = (): ReactElement => {
 
     return (
         <BrowserRouter>
-            <Routes
-                authenticated={loggedIn}
-                notAuthenticatedRoute="/login"
-                notAuthenticatedAction={() => alert('you are not authenticated')}
-            >
+            <Routes authenticated={loggedIn} notAuthenticatedRoute="/login" notAuthenticatedAction={() => undefined}>
                 <Route element={<RedirectWrapper />}>
                     <Route path="/" element={<MainLayout />}>
                         <Route index element={<Navigate to="/about" />} />

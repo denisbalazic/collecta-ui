@@ -14,6 +14,7 @@ import {Strong} from '../../elements/Strong';
 import {mapApiToValidationErrors} from '../../../utils/utils';
 import {ErrorCodes, IResponseError} from '../../../types/error';
 import Button from '../../elements/Button';
+import ResendVerificationEmailMessage from '../../compounds/ResendVerificationEmailMessage';
 
 const RegisterUserSchema = z
     .object({
@@ -146,23 +147,7 @@ const Register = (): ReactElement => {
                     </H2>
                 )}
 
-                {userIsNotVerifiedError && (
-                    <H2 data-test="register-userIsNotVerifiedError">
-                        <p>
-                            User with email <Strong>{registerUser.email}</Strong> is already registered, but is not
-                            verified. Please check your email for verification link.
-                        </p>
-                        <p>If you didn&apos;t receive the email, you can resend it.</p>
-                        <Button
-                            onClick={() => resendVerification(registerUser.email)}
-                            size="md"
-                            transparent
-                            data-test="resend-verification-email"
-                        >
-                            Resend email
-                        </Button>
-                    </H2>
-                )}
+                {userIsNotVerifiedError && <ResendVerificationEmailMessage email={registerUser.email} />}
             </InfoBox>
         </CenteredContainer>
     );

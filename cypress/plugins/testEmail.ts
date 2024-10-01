@@ -1,20 +1,32 @@
 import axios from 'axios';
-import {v4 as uuid} from 'uuid';
 
 /*
  * These functions provide a way to use TestMail.app for testing email functionality.
- * They generate a unique email address with a tag and provide a way to fetch emails sent to that address.
  * Settings and list of received mails can be viewed at:
  * https://testmail.app/console
  */
 
-export const generateTaggedEmailAddress = (tag: string): string => {
-    const id = uuid().split('-')[0];
-    const suffixedTag = `${tag}${id}`;
-    return `${process.env.TESTMAIL_NAMESPACE}.${suffixedTag}@inbox.testmail.app`;
+const testMailNamespace = 'kycjz';
+export const getTaggedEmailAddress = (tag: string): string => {
+    return `${testMailNamespace}.${tag}@inbox.testmail.app`;
 };
 
-export const getTaggedEmail = async (email: string): Promise<any> => {
+/**
+ * Fetches the last tagged email sent to the specified email address after the given timestamp.
+ * Timestamp should be obtained on the very beginning of the test, so we can fetch only emails that were sent after the test started.
+ *
+ * @param {Object} params - The parameters for fetching the email.
+ * @param {string} params.email - The email address to fetch the email for.
+ * @param {number} params.timestampFrom - The timestamp from which to start fetching emails.
+ * @returns {Promise<{headers: Record<string, string>, body: string} | null>} - The headers and body of the last tagged email, or null if no email is found.
+ */
+export const getLastTaggedEmail = async ({
+    email,
+    timestampFrom,
+}: {
+    email: string;
+    timestampFrom: number;
+}): Promise<{headers: Record<string, string>; body: string} | null> => {
     // look at generateTaggedEmailAddress to see how the email is formatted
     const tag = email.split('@')[0].split('.')[1].toLowerCase();
     try {
@@ -24,6 +36,7 @@ export const getTaggedEmail = async (email: string): Promise<any> => {
                 namespace: process.env.TESTMAIL_NAMESPACE,
                 pretty: true,
                 tag,
+                timestamp_from: timestampFrom,
             },
         });
 
@@ -32,7 +45,7 @@ export const getTaggedEmail = async (email: string): Promise<any> => {
 
             return {
                 headers: taggedEmail.headers,
-                body: taggedEmail.html, // or lastEmail.text, depending on what you need
+                body: taggedEmail.html, // or taggedEmail.text, depending on what you need
             };
         }
 

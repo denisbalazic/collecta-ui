@@ -1,11 +1,12 @@
 import {createApi} from '@reduxjs/toolkit/query/react';
 import {removeLocalTokens, setLocalTokens} from '../../service/auth.service';
-import {IAuthCredentials, IResetPasswordDto, ITokenResponse} from '../../types/IUser';
+import {IResetPasswordDto, ITokenResponse} from '../../types/IUser';
 import {setRedirectAction} from '../common.reducer';
 import {fetchUserAction} from './user.api';
 import {setLoggedIn, setVerified} from '../auth.reducer';
 import {baseQueryWithReauth} from '../utils';
 import {RegisterUserDto} from '../../components/views/auth/Register';
+import {AuthCredentials} from '../../components/views/auth/Login';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
@@ -18,7 +19,7 @@ export const authApi = createApi({
                 body: registerUser,
             }),
         }),
-        login: builder.mutation<ITokenResponse, IAuthCredentials>({
+        login: builder.mutation<ITokenResponse, AuthCredentials>({
             query: (credentials) => ({
                 url: '/auth/login',
                 method: 'POST',
@@ -44,8 +45,9 @@ export const authApi = createApi({
                 url: '/auth/logout',
                 method: 'POST',
             }),
-            onQueryStarted: async (arg, {dispatch}) => {
+            onQueryStarted: async (arg, {dispatch, queryFulfilled}) => {
                 try {
+                    await queryFulfilled;
                     removeLocalTokens();
                     dispatch(setLoggedIn(false));
                     dispatch(setRedirectAction('/'));

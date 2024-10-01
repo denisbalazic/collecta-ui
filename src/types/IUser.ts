@@ -7,11 +7,6 @@ export interface IUser {
     __v?: number;
 }
 
-export interface IAuthCredentials {
-    email: string;
-    password: string;
-}
-
 export interface IResetPasswordDto {
     password: string;
     confirmedPassword: string;

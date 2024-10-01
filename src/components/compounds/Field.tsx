@@ -5,10 +5,20 @@ import {FormFieldProps} from './Form';
 interface FieldProps extends FormFieldProps<string | number> {
     label?: string;
     placeholder?: string;
+    type?: string;
     testId?: string;
 }
 
-const Field = ({label, name, placeholder, value, onChange, errorMsg, testId}: FieldProps): ReactElement => {
+const Field = ({
+    label,
+    name,
+    type = 'text',
+    placeholder,
+    value,
+    onChange,
+    errorMsg,
+    testId,
+}: FieldProps): ReactElement => {
     const hasError = errorMsg && errorMsg.length > 0;
 
     return (
@@ -20,7 +30,7 @@ const Field = ({label, name, placeholder, value, onChange, errorMsg, testId}: Fi
             )}
             <InputStyled
                 id={name}
-                type="text"
+                type={type}
                 name={name}
                 value={value}
                 placeholder={placeholder}

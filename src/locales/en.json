@@ -11,5 +11,12 @@
             "mustBeTrue": "You must agree to the terms and conditions",
             "alreadyExists": "This name is already registered"
         }
+    },
+    "login": {
+        "errors": {
+            "passwordTooShort": "Password must be at least 8 characters long",
+            "wrongCredentials": "Wrong credentials",
+            "tooManyAttempts": "Too many failed login attempts. Try again in 5 minutes"
+        }
     }
 }

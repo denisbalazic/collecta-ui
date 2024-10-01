@@ -12,20 +12,7 @@ import {IPageable} from '../types/pageable';
 const fetchBaseQueryOptions = {
     baseUrl: API_HOST,
     jsonContentType: 'application/json',
-};
-
-export const baseQuery = fetchBaseQuery({
-    ...fetchBaseQueryOptions,
-    prepareHeaders: (headers: Headers): Headers => {
-        const accessToken = getLocalAccessToken();
-        if (accessToken) {
-            headers.set('authorization', `Bearer ${accessToken}`);
-            // Next line is possibly unnecessary and should be removed
-            headers.set('Access-Control-Allow-Origin', '*');
-        }
-        return headers;
-    },
-    responseHandler: async (response) => {
+    responseHandler: async (response: any) => {
         const result: IResponse = await response.json();
 
         // Check if the response matches the envelope pattern (IResponse)
@@ -39,6 +26,19 @@ export const baseQuery = fetchBaseQuery({
         }
 
         return result;
+    },
+};
+
+export const baseQuery = fetchBaseQuery({
+    ...fetchBaseQueryOptions,
+    prepareHeaders: (headers: Headers): Headers => {
+        const accessToken = getLocalAccessToken();
+        if (accessToken) {
+            headers.set('authorization', `Bearer ${accessToken}`);
+            // Next line is possibly unnecessary and should be removed
+            headers.set('Access-Control-Allow-Origin', '*');
+        }
+        return headers;
     },
 });
 

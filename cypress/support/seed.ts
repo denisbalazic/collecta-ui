@@ -1,6 +1,16 @@
+import {getTaggedEmailAddress} from '../plugins/testEmail';
+
 export const unregisteredUserDto = {
     name: 'Jess Unregistered',
-    email: 'jess.unregistered@test.eu',
+    email: getTaggedEmailAddress('unregistered'),
+    password: 'Password1!',
+    confirmedPassword: 'Password1!',
+    termsConfirmed: true,
+};
+
+export const unregisteredUserDto2 = {
+    name: 'Jess Unregistered',
+    email: getTaggedEmailAddress('unregistered2'),
     password: 'Password1!',
     confirmedPassword: 'Password1!',
     termsConfirmed: true,
@@ -8,7 +18,7 @@ export const unregisteredUserDto = {
 
 export const unverifiedUserDto = {
     name: 'Jess Unverified',
-    email: 'jess.unverified@test.eu',
+    email: getTaggedEmailAddress('unverified'),
     password: 'Password1!',
     confirmedPassword: 'Password1!',
     termsConfirmed: true,
@@ -33,7 +43,7 @@ export const unverifiedUserCredentials = {
 
 export const unverifiedUserWithExpiredTokenDto = {
     name: 'Jess Unverified Expired',
-    email: 'jess.unverified.expired@test.eu',
+    email: getTaggedEmailAddress('unverifiedExpired'),
     password: 'Password1!',
     confirmedPassword: 'Password1!',
     termsConfirmed: true,
@@ -53,7 +63,7 @@ export const unverifiedUserWithExpiredToken = {
 
 export const verifiedUserDto = {
     name: 'Jess Verified',
-    email: 'jess.verified@test.eu',
+    email: getTaggedEmailAddress('verified'),
     password: 'Password1!',
     confirmedPassword: 'Password1!',
     termsConfirmed: true,

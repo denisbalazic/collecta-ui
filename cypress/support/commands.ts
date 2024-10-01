@@ -36,8 +36,30 @@
 //   }
 // }
 
+import {verifiedUserCredentials} from './seed';
+import {AuthCredentials} from '../../src/components/views/auth/Login';
+
 Cypress.Commands.add('getByTestId', (id) => {
     cy.get(`[data-test=${id}]`);
 });
+
+Cypress.Commands.add('login', (credentials: AuthCredentials = verifiedUserCredentials) => {
+    cy.intercept('POST', '/auth/login').as('loginRequest');
+    cy.visit('/login');
+    cy.getByTestId('login-email').type(credentials.email);
+    cy.getByTestId('login-password').type(credentials.password);
+    cy.getByTestId('login-form').getByTestId('form-submit').click();
+
+    cy.wait('@loginRequest').then((interception) => {
+        // eslint-disable-next-line no-unused-expressions
+        expect(interception.response).to.not.be.null;
+    });
+});
+
+Cypress.Commands.add('getLocalStorageItem', (key) =>
+    cy.getAllLocalStorage().then((result) => {
+        return result?.[Cypress.env('baseUrl')]?.[key] || null;
+    })
+);
 
 export {};

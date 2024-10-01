@@ -1,5 +1,21 @@
 import mongoose from 'mongoose';
+import axios from 'axios';
 import {seed} from '../support/seed';
+
+export const resetDb = async (): Promise<null> => {
+    await axios.post('http://localhost:3000/testDb/reset');
+    return null;
+};
+
+export const seedDb = async (): Promise<null> => {
+    await axios.post('http://localhost:3000/testDb/populate', seed);
+    return null;
+};
+
+/* Use resetDbAlt and seedDbAlt for the alternative implementation
+ * if we have access to the database directly
+ * and we don't want to use endpoints to reset and seed the database
+ */
 
 const connectToDatabase = async (): Promise<typeof mongoose> => {
     const mongoUri = process.env.CYPRESS_TEST_DB;
@@ -10,7 +26,7 @@ const connectToDatabase = async (): Promise<typeof mongoose> => {
     return mongoose;
 };
 
-export const resetDb = async (): Promise<null> => {
+export const resetDbAlt = async (): Promise<null> => {
     try {
         await connectToDatabase();
         const connection = mongoose.connection.db;
@@ -36,7 +52,7 @@ export const resetDb = async (): Promise<null> => {
     }
 };
 
-export const seedDb = async (): Promise<null> => {
+export const seedDbAlt = async (): Promise<null> => {
     try {
         await connectToDatabase();
         const connection = mongoose.connection.db;
@@ -65,17 +81,4 @@ export const seedDb = async (): Promise<null> => {
         console.error('Error seeding database:', error);
         throw error;
     }
-};
-
-// TODO: Above works for now, but use these because direct access to the database doesn't create the same resources as the API
-/* use resetDbAlt and seedDbAlt for the alternative implementation
- * if we don't have access to the database
- * and we have endpoints configured to reset and seed the database
- */
-export const resetDbAlt = () => {
-    return cy.request('POST', 'http://localhost:3000/testDb/reset');
-};
-
-export const seedDbAlt = () => {
-    return cy.request('POST', 'http://localhost:3000/testDb/populate', seed);
 };
