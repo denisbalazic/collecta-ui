@@ -9,8 +9,16 @@ export const unregisteredUserDto = {
 };
 
 export const unregisteredUserDto2 = {
-    name: 'Jess Unregistered',
+    name: 'Jess Unregistered 2',
     email: getTaggedEmailAddress('unregistered2'),
+    password: 'Password1!',
+    confirmedPassword: 'Password1!',
+    termsConfirmed: true,
+};
+
+export const unregisteredUserDto3 = {
+    name: 'Jess Unregistered 3',
+    email: getTaggedEmailAddress('unregistered3'),
     password: 'Password1!',
     confirmedPassword: 'Password1!',
     termsConfirmed: true,

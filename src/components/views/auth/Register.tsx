@@ -85,8 +85,9 @@ const Register = (): ReactElement => {
                     >
                         <Field name="name" label="Name" required testId="register-name" />
                         <Field name="email" label="Email" required testId="register-email" />
-                        <Field name="password" label="Password" required testId="register-password" />
+                        <Field type="password" name="password" label="Password" required testId="register-password" />
                         <Field
+                            type="password"
                             name="confirmedPassword"
                             label="Repeat password"
                             required

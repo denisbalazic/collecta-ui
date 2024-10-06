@@ -6,6 +6,7 @@ import axios from 'axios';
  * https://testmail.app/console
  */
 
+// TODO: Set namespace in environment variable
 const testMailNamespace = 'kycjz';
 export const getTaggedEmailAddress = (tag: string): string => {
     return `${testMailNamespace}.${tag}@inbox.testmail.app`;

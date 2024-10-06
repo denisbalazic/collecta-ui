@@ -4,6 +4,7 @@ import {recurse} from 'cypress-recurse';
 import {
     unregisteredUserDto,
     unregisteredUserDto2,
+    unregisteredUserDto3,
     unverifiedUserCredentials,
     unverifiedUserDto,
     verifiedUserDto,
@@ -49,8 +50,7 @@ describe('Auth spec', () => {
     it('disables submit of registration if all fields are not filled', () => {
         cy.visit('/register');
 
-        cy.getByTestId('register-name').should('be.visible');
-        cy.getByTestId('register-email').should('be.visible');
+        cy.getByTestId('register-form').should('be.visible');
         cy.getByTestId('register-form').getByTestId('form-submit').should('be.disabled');
     });
 
@@ -104,7 +104,7 @@ describe('Auth spec', () => {
         cy.getByTestId('resend-verification-email').should('exist');
     });
 
-    it('registers a new user and sends verification mail with valid link', () => {
+    it('registers a new user and sends verification mail, verifies email and logs in', () => {
         const timestampFrom = new Date().getTime();
         fillRegisterFormAndSubmit(unregisteredUserDto);
 
@@ -128,10 +128,40 @@ describe('Auth spec', () => {
 
                 cy.contains('Confirm Email').click();
 
-                cy.location('pathname').should('contain', '/verify-email');
+                cy.location('pathname').should('include', '/verify-email');
                 cy.location('pathname').should('eq', '/login');
                 cy.getByTestId('login-form').should('be.visible');
+
+                cy.login(unregisteredUserDto);
+
+                cy.location('pathname').should('not.eq', '/login');
             });
+    });
+
+    it('resends verification email', () => {
+        fillRegisterFormAndSubmit(unregisteredUserDto2);
+
+        cy.getByTestId('register-successMsg').should('be.visible').and('include.text', unregisteredUserDto2.email);
+        cy.getByTestId('resend-verification-email').should('exist').click();
+
+        recurse(() => cy.task('getLastTaggedEmail', {email: unregisteredUserDto2.email}), Cypress._.isObject, {
+            timeout: 30000,
+            delay: 5000,
+        })
+            .its('body')
+            .then((body) => {
+                cy.document({log: false}).invoke({log: false}, 'write', body);
+
+                cy.contains(unregisteredUserDto2.name).should('be.visible');
+                cy.contains('Confirm Email').should('be.visible');
+            });
+    });
+
+    it('trying to verify with invalid token', () => {
+        cy.visit('/verify-email/invalidToken');
+
+        cy.getByTestId('verify-email-error').should('be.visible');
+        cy.get('a[href="/register"]').should('exist');
     });
 
     it('tries to login; displays error message if user is not verified', () => {
@@ -143,32 +173,12 @@ describe('Auth spec', () => {
     });
 
     it('tries to login; displays error message if user is not registered', () => {
-        cy.login(unregisteredUserDto2);
+        cy.login(unregisteredUserDto3);
 
         cy.getByTestId('login-error').should('be.visible').and('include.text', 'Wrong credentials');
     });
 
-    it('tries to login more than 5 times in 5 minutes with wrong credentials', () => {
-        cy.intercept('POST', '/auth/login').as('loginRequest');
-        const wrongCredentials = {email: verifiedUserDto.email, password: 'wrongPassword'};
-
-        for (let i = 0; i < 5; i++) {
-            cy.login(wrongCredentials);
-
-            cy.wait('@loginRequest').then((interception) => {
-                expect(interception.response?.statusCode).to.eq(401);
-            });
-        }
-
-        cy.login(wrongCredentials);
-        cy.wait('@loginRequest').then((interception) => {
-            expect(interception.response?.statusCode).to.eq(429);
-            cy.getByTestId('login-error').should('be.visible').and('include.text', 'Too many failed login attempts');
-        });
-    });
-
-    // TODO: doesnt work because of previous test: logged in too many times :/
-    it.only('logs in a user with valid credentials', () => {
+    it('logs in a user with valid credentials', () => {
         cy.intercept('POST', '/auth/login').as('loginRequest');
         cy.visit('/login');
 
@@ -218,11 +228,11 @@ describe('Auth spec', () => {
         cy.login();
 
         cy.visit('/login');
-        cy.location('pathname').should('eq', '/collections');
+        cy.location('pathname').should('not.eq', '/login');
     });
 
-    // TODO: Not finished!!!!!
-    it.skip('resets password', () => {
+    it('resets password', () => {
+        const timestampFrom = new Date().getTime();
         cy.visit('/forgot-password');
 
         cy.getByTestId('forgot-password-form').should('be.visible');
@@ -231,20 +241,65 @@ describe('Auth spec', () => {
 
         cy.getByTestId('forgot-password-successMsg').should('be.visible').and('include.text', verifiedUserDto.email);
 
-        recurse(() => cy.task('getTaggedEmail', verifiedUserDto.email), Cypress._.isObject, {
-            timeout: 300000,
-            delay: 5000,
-        })
+        recurse(
+            () => cy.task('getLastTaggedEmail', {email: verifiedUserDto.email, timestampFrom}),
+            Cypress._.isObject,
+            {
+                timeout: 30000,
+                delay: 5000,
+            }
+        )
             .its('body')
             .then((body) => {
                 cy.document({log: false}).invoke({log: false}, 'write', body);
 
-                cy.contains('Reset Password').should('be.visible');
+                cy.contains(verifiedUserDto.name).should('be.visible');
+                cy.contains('Reset password').should('be.visible');
+                cy.contains('Reset password').click();
 
-                cy.contains('Reset Password').click();
-
-                cy.location('pathname').should('contain', '/reset-password');
+                cy.location('pathname').should('include', '/reset-password');
                 cy.getByTestId('reset-password-form').should('be.visible');
+
+                cy.getByTestId('reset-password-password').type('NewPassword1!');
+                cy.getByTestId('reset-password-confirmedPassword').type('NewPassword1!');
+                cy.getByTestId('reset-password-form').getByTestId('form-submit').click();
+
+                cy.location('pathname').should('eq', '/login');
+
+                cy.login({...verifiedUserDto, password: 'NewPassword1!'});
+                cy.location('pathname').should('not.eq', '/login');
             });
+    });
+
+    it('tries to reset password with invalid token', () => {
+        cy.visit('/reset-password/invalidToken');
+
+        cy.getByTestId('reset-password-form').should('be.visible');
+        cy.getByTestId('reset-password-password').type('NewPassword1!');
+        cy.getByTestId('reset-password-confirmedPassword').type('NewPassword1!');
+        cy.getByTestId('reset-password-form').getByTestId('form-submit').click();
+
+        cy.getByTestId('reset-password-error').should('be.visible');
+        cy.get('a[href="/forgot-password"]').should('exist');
+    });
+
+    // This test needs to be last because it locks the user out for 5 minutes!
+    it('tries to login more than 5 times in 5 minutes with wrong credentials', () => {
+        cy.intercept('POST', '/auth/login').as('loginRequest');
+        const wrongCredentials = {email: verifiedUserDto.email, password: 'wrongPassword'};
+
+        for (let i = 0; i < 5; i++) {
+            cy.login(wrongCredentials);
+
+            cy.wait('@loginRequest').then((interception) => {
+                expect(interception.response?.statusCode).to.eq(401);
+            });
+        }
+
+        cy.login(wrongCredentials);
+        cy.wait('@loginRequest').then((interception) => {
+            expect(interception.response?.statusCode).to.eq(429);
+            cy.getByTestId('login-error').should('be.visible').and('include.text', 'Too many failed login attempts');
+        });
     });
 });

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {ReactElement, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
 import {useVerifyEmailMutation} from '../../../store/api/auth.api';
@@ -6,16 +6,14 @@ import InfoBox from '../../compounds/InfoBox';
 import CenteredContainer from '../../elements/CenteredContainer';
 import Button from '../../elements/Button';
 import LoadingSpinner from '../../elements/Spinner';
+import {ErrorCodes, IResponseError} from '../../../types/error';
 
-const VerifyEmail = () => {
+const VerifyEmail = (): ReactElement => {
     const {token = ''} = useParams();
-    const [verifyEmailMutation, {isSuccess, isLoading, error}] = useVerifyEmailMutation();
-    const expiredToken = (error as FetchBaseQueryError)?.status === 401;
-    const invalidToken = (error as FetchBaseQueryError)?.status === 410;
+    const [verifyEmailMutation, {isLoading, error}] = useVerifyEmailMutation();
+    const errorObj = (error as FetchBaseQueryError)?.data as IResponseError | undefined;
     let errorMessage;
-    if (expiredToken) {
-        errorMessage = 'Token has expired.';
-    } else if (invalidToken) {
+    if (errorObj?.code === ErrorCodes.INVALID_TOKEN) {
         errorMessage = 'This link is no valid.';
     }
 
@@ -30,20 +28,14 @@ const VerifyEmail = () => {
             <InfoBox title="Email verification">
                 {isLoading && <LoadingSpinner />}
 
-                {isSuccess && (
-                    <p>
-                        Your email has been verified. You can now <a href="/login">login</a>.
-                    </p>
-                )}
-
                 {error && (
-                    <>
+                    <div data-test="verify-email-error">
                         <p>{errorMessage || 'An error occurred while verifying your email.'}</p>
                         <p>Please try registering again.</p>
                         <Button to="/register" transparent>
                             Register
                         </Button>
-                    </>
+                    </div>
                 )}
             </InfoBox>
         </CenteredContainer>

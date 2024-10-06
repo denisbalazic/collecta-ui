@@ -91,20 +91,20 @@ const Form = ({
             return child as ReactElement;
         }) ?? [];
 
-    const requiredFieldNames = Children.toArray(children)
+    const requiredFields = Children.toArray(children)
         .filter(
             (child): child is ReactElement<FormFieldProps> =>
                 isValidElement<FormFieldProps>(child) && !!child.props.required
         )
-        .map((child) => child.props.name);
+        .map((child) => child.props);
 
-    const requiredFieldsFilled = requiredFieldNames?.every((name) => formState && formState[name]);
+    const requiredFieldsFilled = requiredFields?.every((field) => (formState ? formState[field.name] : field.value));
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
 
         const trimmedFormState = trimStringProperties(formState);
-        onFormChange(trimmedFormState);
+        onFormChange && onFormChange(trimmedFormState);
 
         if (validationSchema) {
             const result = validationSchema.safeParse(trimmedFormState);

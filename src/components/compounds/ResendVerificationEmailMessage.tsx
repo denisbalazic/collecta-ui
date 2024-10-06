@@ -9,7 +9,7 @@ interface ResendVerificationEmailMessageProps {
 }
 
 const ResendVerificationEmailMessage = ({email}: ResendVerificationEmailMessageProps) => {
-    const [resendVerification] = useResendVerificationEmailMutation();
+    const [resendVerification, {isSuccess}] = useResendVerificationEmailMutation();
 
     return (
         <H2 data-test="auth-userIsNotVerifiedError">
@@ -22,6 +22,7 @@ const ResendVerificationEmailMessage = ({email}: ResendVerificationEmailMessageP
                 onClick={() => resendVerification(email)}
                 size="md"
                 transparent
+                disabled={isSuccess}
                 data-test="resend-verification-email"
             >
                 Resend email

@@ -38,6 +38,7 @@ const ForgotPassword = () => {
                             placeholder="email"
                             value={email}
                             onChange={(_, v) => setEmail(v as string)}
+                            required
                             errorMsg={errorMsg}
                             testId="forgot-password-email"
                         />
