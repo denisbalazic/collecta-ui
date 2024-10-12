@@ -7,9 +7,9 @@ import {
     unregisteredUserDto3,
     unverifiedUserCredentials,
     unverifiedUserDto,
+    verifiedUser2Dto,
     verifiedUserDto,
 } from '../../support/seed';
-import {RegisterUserDto} from '../../../src/components/views/auth/Register';
 import {ACCESS_TOKEN, REFRESH_TOKEN} from '../../../src/service/auth.service';
 
 describe('Auth spec', () => {
@@ -22,18 +22,6 @@ describe('Auth spec', () => {
     });
 
     const protectedRoute = '/collections/new';
-
-    const fillRegisterFormAndSubmit = (dto: RegisterUserDto): void => {
-        cy.visit('/register');
-
-        cy.getByTestId('register-name').type(dto.name);
-        cy.getByTestId('register-email').type(dto.email);
-        cy.getByTestId('register-password').type(dto.password);
-        cy.getByTestId('register-confirmedPassword').type(dto.confirmedPassword);
-        cy.getByTestId('register-termsConfirmed')[dto.termsConfirmed ? 'check' : 'uncheck']();
-
-        cy.getByTestId('register-form').getByTestId('form-submit').click();
-    };
 
     it('displays register form', () => {
         cy.visit('/register');
@@ -77,20 +65,20 @@ describe('Auth spec', () => {
         ];
 
         invalidRegisterDtos.forEach((dto) => {
-            fillRegisterFormAndSubmit(dto);
+            cy.fillRegisterFormAndSubmit(dto);
 
             cy.getByTestId(`${dto.testId}--error`).should('be.visible');
         });
     });
 
     it('displays error message if server validation fails; same name', () => {
-        fillRegisterFormAndSubmit({...unregisteredUserDto, name: verifiedUserDto.name});
+        cy.fillRegisterFormAndSubmit({...unregisteredUserDto, name: verifiedUserDto.name});
 
         cy.getByTestId(`register-name--error`).should('be.visible');
     });
 
     it('displays error message if user is already registered', () => {
-        fillRegisterFormAndSubmit(verifiedUserDto);
+        cy.fillRegisterFormAndSubmit(verifiedUserDto);
 
         cy.getByTestId(`register-userExistsError`).should('be.visible').and('include.text', verifiedUserDto.email);
         cy.get('a[href="/login"]').should('exist');
@@ -98,7 +86,7 @@ describe('Auth spec', () => {
     });
 
     it('displays error message if user is registered, but not verified', () => {
-        fillRegisterFormAndSubmit(unverifiedUserDto);
+        cy.fillRegisterFormAndSubmit(unverifiedUserDto);
 
         cy.getByTestId(`auth-userIsNotVerifiedError`).should('be.visible').and('include.text', unverifiedUserDto.email);
         cy.getByTestId('resend-verification-email').should('exist');
@@ -106,7 +94,7 @@ describe('Auth spec', () => {
 
     it('registers a new user and sends verification mail, verifies email and logs in', () => {
         const timestampFrom = new Date().getTime();
-        fillRegisterFormAndSubmit(unregisteredUserDto);
+        cy.fillRegisterFormAndSubmit(unregisteredUserDto);
 
         cy.getByTestId('register-successMsg').should('be.visible').and('include.text', unregisteredUserDto.email);
         cy.getByTestId('resend-verification-email').should('exist');
@@ -139,7 +127,7 @@ describe('Auth spec', () => {
     });
 
     it('resends verification email', () => {
-        fillRegisterFormAndSubmit(unregisteredUserDto2);
+        cy.fillRegisterFormAndSubmit(unregisteredUserDto2);
 
         cy.getByTestId('register-successMsg').should('be.visible').and('include.text', unregisteredUserDto2.email);
         cy.getByTestId('resend-verification-email').should('exist').click();
@@ -167,15 +155,37 @@ describe('Auth spec', () => {
     it('tries to login; displays error message if user is not verified', () => {
         cy.login(unverifiedUserCredentials);
 
-        cy.getByTestId(`auth-userIsNotVerifiedError`).should('exist').and('be.visible');
-        // .and('include.text', unverifiedUserCredentials.email);
-        // cy.getByTestId('resend-verification-email').should('exist');
+        cy.getByTestId(`auth-userIsNotVerifiedError`)
+            .should('exist')
+            .and('be.visible')
+            .and('include.text', unverifiedUserCredentials.email);
+        cy.getByTestId('resend-verification-email').should('exist');
     });
 
     it('tries to login; displays error message if user is not registered', () => {
         cy.login(unregisteredUserDto3);
 
         cy.getByTestId('login-error').should('be.visible').and('include.text', 'Wrong credentials');
+    });
+
+    it('tries to login more than 5 times in 5 minutes with wrong credentials', () => {
+        cy.intercept('POST', '/auth/login').as('loginRequest');
+        // verifiedUser2Dto is used only here to avoid locking the verified user
+        const wrongCredentials = {email: verifiedUser2Dto.email, password: 'wrongPassword'};
+
+        for (let i = 0; i < 5; i++) {
+            cy.login(wrongCredentials);
+
+            cy.wait('@loginRequest').then((interception) => {
+                expect(interception.response?.statusCode).to.eq(401);
+            });
+        }
+
+        cy.login(wrongCredentials);
+        cy.wait('@loginRequest').then((interception) => {
+            expect(interception.response?.statusCode).to.eq(429);
+            cy.getByTestId('login-error').should('be.visible').and('include.text', 'Too many failed login attempts');
+        });
     });
 
     it('logs in a user with valid credentials', () => {
@@ -195,7 +205,7 @@ describe('Auth spec', () => {
         });
 
         cy.location('pathname').should('eq', '/collections');
-        cy.getByTestId('logout-button').should('be.visible');
+        cy.getByTestId('profile-button').should('be.visible');
 
         cy.visit(protectedRoute);
         cy.location('pathname').should('eq', protectedRoute);
@@ -205,6 +215,7 @@ describe('Auth spec', () => {
         cy.intercept('POST', '/auth/logout').as('logoutRequest');
         cy.login();
 
+        cy.getByTestId('profile-button').click();
         cy.getByTestId('logout-button').click();
 
         cy.wait('@logoutRequest').then((interception) => {
@@ -283,23 +294,28 @@ describe('Auth spec', () => {
         cy.get('a[href="/forgot-password"]').should('exist');
     });
 
-    // This test needs to be last because it locks the user out for 5 minutes!
-    it('tries to login more than 5 times in 5 minutes with wrong credentials', () => {
-        cy.intercept('POST', '/auth/login').as('loginRequest');
-        const wrongCredentials = {email: verifiedUserDto.email, password: 'wrongPassword'};
+    it('changes password', () => {
+        cy.login();
+        cy.location('pathname').should('eq', '/collections');
+        cy.visit('/user');
+        cy.location('pathname').should('eq', '/user');
 
-        for (let i = 0; i < 5; i++) {
-            cy.login(wrongCredentials);
+        cy.contains(verifiedUserDto.name).should('be.visible');
+        cy.getByTestId('change-password-show').as('changePasswordButton');
+        cy.get('@changePasswordButton').should('be.visible').click({force: true});
 
-            cy.wait('@loginRequest').then((interception) => {
-                expect(interception.response?.statusCode).to.eq(401);
-            });
-        }
+        cy.getByTestId('change-password-form').should('be.visible');
+        cy.getByTestId('change-password-oldPassword').type(verifiedUserDto.password);
+        cy.getByTestId('change-password-password').type('NewPassword1!');
+        cy.getByTestId('change-password-confirmedPassword').type('NewPassword1!');
+        cy.getByTestId('change-password-form').getByTestId('form-submit').click();
 
-        cy.login(wrongCredentials);
-        cy.wait('@loginRequest').then((interception) => {
-            expect(interception.response?.statusCode).to.eq(429);
-            cy.getByTestId('login-error').should('be.visible').and('include.text', 'Too many failed login attempts');
-        });
+        cy.getByTestId('change-password-form').should('not.exist');
+
+        cy.getByTestId('profile-button').click();
+        cy.getByTestId('logout-button').click();
+
+        cy.login({...verifiedUserDto, password: 'NewPassword1!'});
+        cy.location('pathname').should('not.eq', '/login');
     });
 });

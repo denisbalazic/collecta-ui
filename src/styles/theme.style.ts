@@ -25,6 +25,13 @@ const theme: BasicTheme = {
         xl: '(max-width: 1440px)', // for desktop / monitors
         xxl: '(max-width: 1920px)', // for big screens
     },
+    zIndex: {
+        low: 10,
+        medium: 100,
+        high: 1000, // dropdown,
+        important: 10000,
+        overlay: 100000,
+    },
 };
 
 export default theme;

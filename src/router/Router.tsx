@@ -16,6 +16,7 @@ import AboutPage from '../components/views/AboutPage';
 import VerifyEmail from '../components/views/auth/VerifyEmail';
 import ForgotPassword from '../components/views/auth/ForgotPassword';
 import ResetPassword from '../components/views/auth/ResetPassword';
+import UserProfile from '../components/views/user/UserProfile';
 
 const Router = (): ReactElement => {
     const {loggedIn} = useAuth();
@@ -36,6 +37,7 @@ const Router = (): ReactElement => {
                         <Route isPrivate path="/collections/new" element={<NewCollectionForm />} />
                         <Route isPrivate path="/collections/:collectionId/update" element={<EditCollectionForm />} />
                         <Route path="/collections/:collectionId" element={<Collection />} />
+                        <Route isPrivate path="/user" element={<UserProfile />} />
                         <Route path="/error" element={<ErrorThrowingPage />} />
                         <Route path="/*" element={<NotFound />} />
                     </Route>

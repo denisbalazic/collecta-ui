@@ -55,6 +55,7 @@ const StyledButton = styled.button<StyledButtonProps>`
     justify-content: center;
     align-items: center;
     width: ${({$fullWidth}) => ($fullWidth ? '100%' : 'auto')};
+    max-width: ${({$fullWidth}) => ($fullWidth ? '100%' : 'max-content')};
     height: ${({theme}) => theme.layout.btnHeight};
     padding: 0.375rem 1rem;
     border: ${({$transparent, $secondary, theme}) => {

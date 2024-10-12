@@ -7,6 +7,7 @@ import {setLoggedIn, setVerified} from '../auth.reducer';
 import {baseQueryWithReauth} from '../utils';
 import {RegisterUserDto} from '../../components/views/auth/Register';
 import {AuthCredentials} from '../../components/views/auth/Login';
+import {ChangePasswordDto} from '../../components/views/user/UserProfile';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
@@ -57,22 +58,11 @@ export const authApi = createApi({
                 }
             },
         }),
-        logoutAll: builder.mutation<void, void>({
+        logoutOtherDevices: builder.mutation<void, void>({
             query: () => ({
-                url: '/auth/logout-all',
+                url: '/auth/logout-other-devices',
                 method: 'POST',
             }),
-            // TODO: Make it logout all except current session (api needs to be updated)
-            onQueryStarted: async (arg, {queryFulfilled, dispatch}) => {
-                try {
-                    await queryFulfilled;
-                    removeLocalTokens();
-                    dispatch(setLoggedIn(false));
-                    dispatch(setRedirectAction('/'));
-                } catch (error) {
-                    // Handle error
-                }
-            },
         }),
         verifyEmail: builder.mutation<void, string>({
             query: (token) => ({
@@ -118,6 +108,13 @@ export const authApi = createApi({
                 }
             },
         }),
+        changePassword: builder.mutation<void, ChangePasswordDto>({
+            query: ({oldPassword, password, confirmedPassword}) => ({
+                url: '/auth/change-password',
+                method: 'POST',
+                body: {oldPassword, password, confirmedPassword},
+            }),
+        }),
     }),
 });
 
@@ -125,8 +122,10 @@ export const {
     useRegisterMutation,
     useLoginMutation,
     useLogoutMutation,
+    useLogoutOtherDevicesMutation,
     useVerifyEmailMutation,
     useResendVerificationEmailMutation,
     useForgotPasswordMutation,
     useResetPasswordMutation,
+    useChangePasswordMutation,
 } = authApi;

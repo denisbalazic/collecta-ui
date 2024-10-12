@@ -5,9 +5,11 @@ import {baseQueryWithReauth} from '../utils';
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: baseQueryWithReauth,
+    tagTypes: ['User'],
     endpoints: (builder) => ({
         fetchUser: builder.query<IUser, void>({
             query: () => 'users/me',
+            providesTags: ['User'],
         }),
     }),
 });

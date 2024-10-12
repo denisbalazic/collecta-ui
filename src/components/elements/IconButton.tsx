@@ -54,7 +54,7 @@ const StyledButton = styled.button<StyledButtonProps>`
     }};
     color: ${({$secondary, theme}) => {
         if ($secondary) return 'white';
-        return theme.colors.primary;
+        return theme.color?.primary;
     }};
     cursor: ${({disabled}) => (disabled ? 'not-allowed' : 'pointer')};
 

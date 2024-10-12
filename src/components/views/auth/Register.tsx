@@ -1,5 +1,5 @@
 import React, {ReactElement, useMemo, useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {z} from 'zod';
 import i18n from 'i18next';
 import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
@@ -15,6 +15,7 @@ import {mapApiToValidationErrors} from '../../../utils/utils';
 import {ErrorCodes, IResponseError} from '../../../types/error';
 import Button from '../../elements/Button';
 import ResendVerificationEmailMessage from '../../compounds/ResendVerificationEmailMessage';
+import {useAuth} from '../../../hooks/useAuth';
 
 const RegisterUserSchema = z
     .object({
@@ -47,6 +48,13 @@ const RegisterUserSchema = z
 export type RegisterUserDto = z.infer<typeof RegisterUserSchema>;
 
 const Register = (): ReactElement => {
+    const navigate = useNavigate();
+    const {loggedIn} = useAuth();
+
+    if (loggedIn) {
+        navigate('/collections');
+    }
+
     const [registerUser, setRegisterUser] = useState<RegisterUserDto>({
         name: '',
         email: '',

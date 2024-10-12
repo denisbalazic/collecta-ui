@@ -94,8 +94,29 @@ export const verifiedUserCredentials = {
     password: verifiedUserDto.password,
 };
 
+// This user is only used for repeated login attempts with wrong password
+export const verifiedUser2Dto = {
+    name: 'Jess Verified 2',
+    email: getTaggedEmailAddress('verified2'),
+    password: 'Password1!',
+    confirmedPassword: 'Password1!',
+    termsConfirmed: true,
+};
+
+export const verifiedUser2 = {
+    _id: '620df4ef18b174c4ba6bb988',
+    name: verifiedUser2Dto.name,
+    email: verifiedUser2Dto.email,
+    termsConfirmed: verifiedUser2Dto.termsConfirmed,
+    password: '$2b$08$S/Syd/ys8AkAevcMUgF.G.mKFNKAJfz.8Cy6n67zw.7OmvRCgT1Sa',
+    isVerified: true,
+    verificationToken: undefined,
+    tokenExpiration: undefined,
+    failedLoginAttempts: [],
+};
+
 export const seed = {
-    users: [verifiedUser, unverifiedUser, unverifiedUserWithExpiredToken],
+    users: [verifiedUser, verifiedUser2, unverifiedUser, unverifiedUserWithExpiredToken],
 } as Record<string, any[]>;
 
 export const expiredToken =

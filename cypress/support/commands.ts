@@ -38,9 +38,22 @@
 
 import {verifiedUserCredentials} from './seed';
 import {AuthCredentials} from '../../src/components/views/auth/Login';
+import {RegisterUserDto} from '../../src/components/views/auth/Register';
 
 Cypress.Commands.add('getByTestId', (id) => {
     cy.get(`[data-test=${id}]`);
+});
+
+Cypress.Commands.add('fillRegisterFormAndSubmit', (dto: RegisterUserDto) => {
+    cy.visit('/register');
+
+    cy.getByTestId('register-name').type(dto.name);
+    cy.getByTestId('register-email').type(dto.email);
+    cy.getByTestId('register-password').type(dto.password);
+    cy.getByTestId('register-confirmedPassword').type(dto.confirmedPassword);
+    cy.getByTestId('register-termsConfirmed')[dto.termsConfirmed ? 'check' : 'uncheck']();
+
+    cy.getByTestId('register-form').getByTestId('form-submit').click();
 });
 
 Cypress.Commands.add('login', (credentials: AuthCredentials = verifiedUserCredentials) => {

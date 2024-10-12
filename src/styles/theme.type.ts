@@ -25,4 +25,11 @@ export interface BasicTheme extends DefaultTheme {
         xl: string;
         xxl: string;
     };
+    zIndex: {
+        low: number;
+        medium: number;
+        high: number;
+        important: number;
+        overlay: number;
+    };
 }
